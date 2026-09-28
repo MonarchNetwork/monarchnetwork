@@ -3,164 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monarch Network</title>
+<title>Monarch Network - Kayıt Ol</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-html{
-scroll-behavior:smooth;
-}
-
 body{
-background:#0f172a;
-color:white;
-}
-
-nav{
+background:#0b1020;
+font-family:Arial,sans-serif;
 display:flex;
-justify-content:space-between;
+justify-content:center;
 align-items:center;
-padding:20px 10%;
-background:#111827;
-}
-
-.logo{
-color:gold;
-font-size:28px;
-font-weight:bold;
-}
-
-nav a{
+height:100vh;
+margin:0;
 color:white;
-text-decoration:none;
-margin-left:20px;
-font-weight:bold;
 }
 
-nav a:hover{
-color:gold;
-}
-
-.hero{
+.box{
+background:#1e293b;
+padding:40px;
+border-radius:15px;
+width:350px;
 text-align:center;
-padding:120px 20px;
 }
 
-.hero h1{
-font-size:70px;
+h1{
 color:gold;
+margin-bottom: 20px;
 }
 
-.hero p{
-font-size:22px;
-margin:15px 0;
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:8px;
+background: #334155;
+color: white;
+outline: none;
 }
 
-.btn{
-padding:15px 30px;
+input::placeholder {
+color: #cbd5e1;
+}
+
+button{
+width:100%;
+padding:12px;
 background:#7c3aed;
 border:none;
-border-radius:10px;
+border-radius:8px;
 color:white;
 cursor:pointer;
-font-size:18px;
-margin:5px;
-text-decoration: none;
-display: inline-block;
+font-weight: bold;
+margin-top: 10px;
 }
 
-.btn:hover{
+button:hover{
 background:#6d28d9;
 }
 
-.cards{
-display:flex;
-justify-content:center;
-gap:20px;
-flex-wrap:wrap;
-padding:50px 20px;
-}
-
-.card{
-background:#1e293b;
-padding:25px;
-border-radius:15px;
-width:280px;
-text-align:center;
-}
-
-.card h2{
+a{
 color:gold;
-margin-bottom:10px;
+text-decoration:none;
+font-weight: bold;
 }
 
-footer{
-text-align:center;
-padding:20px;
-background:#111827;
-margin-top:40px;
+a:hover{
+text-decoration: underline;
+}
+
+p{
+margin: 15px 0;
 }
 </style>
 </head>
-
 <body>
 
-<nav>
-<div class="logo">👑 MONARCH NETWORK</div>
-<div>
-</div>
-</nav>
+<div class="box">
 
-<section class="hero">
-<h1>MONARCH NETWORK</h1>
+<h1>📝 Kayıt Ol</h1>
 
-<p>Türkiye'nin Yeni Nesil Minecraft Sunucusu</p>
+<input type="text" placeholder="Kullanıcı Adı">
 
-<button class="btn" onclick="copyIP()">IP'yi Kopyala</button>
-</section>
-  
+<input type="email" placeholder="E-posta Adresi">
+
+<input type="password" placeholder="Şifre">
+
+<input type="password" placeholder="Şifre Tekrar">
+
+<button type="submit">Hesap Oluştur</button>
+
 <br><br>
 
-<!-- Giriş Yap Butonu giris.html olarak güncellendi -->
-<center>
-    <a href="giris.html" class="btn">🔑 Giriş Yap</a>
-</center>
+<p>
+    Zaten hesabın var mı? <a href="giris.html">Giriş Yap</a>
+</p>
  
-<section class="cards">
+<p>
+    <a href="index.html">🏠 Ana Sayfaya Dön</a>
+</p>
 
-<div class="card" id="ip">
-<h2>🎮 Sunucu IP</h2>
-<p>MonarchNetwork.aternos.me</p>
 </div>
-
-<div class="card" id="discord">
-<h2>💬 Discord</h2>
-<p>Yakında Eklenecek</p>
-</div>
-
-<div class="card" id="modlar">
-<h2>⚔️ Oyun Modları</h2>
-<p>SMP • Survival • Etkinlikler</p>
-</div>
-
-</section>
-
-<footer>
-© Monarch Network
-</footer>
-
-<script>
-function copyIP(){
-navigator.clipboard.writeText("MonarchNetwork.aternos.me");
-alert("IP Kopyalandı: MonarchNetwork.aternos.me");
-}
-</script>
 
 </body>
 </html>
