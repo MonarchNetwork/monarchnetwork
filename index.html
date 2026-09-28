@@ -94,7 +94,6 @@ font-weight: bold;
 background:#6d28d9;
 }
 
-/* Kayıt butonu için farklı bir renk tonu (isteğe bağlı değiştirilebilir) */
 .btn-secondary {
 background: #3b82f6;
 }
@@ -130,7 +129,6 @@ background:#111827;
 margin-top:40px;
 }
 
-/* --- AÇILIR PENCERE (MODAL) STİLLERİ --- */
 .modal-overlay {
 position: fixed;
 top: 0;
@@ -239,7 +237,6 @@ font-size: 14px;
   
 <br><br>
 
-<!-- Ortadaki alan güncellendi: İki ayrı buton yan yana geliyor -->
 <center id="mainAuthBtn"></center>
  
 <section class="cards">
@@ -259,12 +256,10 @@ font-size: 14px;
 </div>
 </section>
 
-<!-- --- AÇILIR PENCERE (MODAL) --- -->
 <div id="authModal" class="modal-overlay">
     <div class="modal-box">
         <span class="close-btn" onclick="toggleModal()">&times;</span>
         
-        <!-- Giriş Formu -->
         <div id="loginForm">
             <h2>🔑 Giriş Yap</h2>
             <input type="text" id="loginUser" placeholder="Kullanıcı Adı">
@@ -273,7 +268,6 @@ font-size: 14px;
             <p>Hesabın yok mu? <a href="#" onclick="switchMode('register')">Kayıt Ol</a></p>
         </div>
 
-        <!-- Kayıt Formu -->
         <div id="registerForm" style="display: none;">
             <h2>📝 Kayıt Ol</h2>
             <input type="text" id="regUser" placeholder="Kullanıcı Adı">
@@ -324,14 +318,13 @@ function checkLogin() {
             <span class="welcome-txt">👋 Hoş geldin, ${loggedInUser}!</span>
             <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
         `;
-        mainAuthBtn.innerHTML = `<span style="color:gold; font-size:20px; font-weight:bold;">Sunucuya Giriş Yapıldı. Keyifli Oyunlar!</span>`;
+        // İstediğin gibi "Siteye Giriş Yapıldı" olarak güncellendi kral
+        mainAuthBtn.innerHTML = `<span style="color:gold; font-size:20px; font-weight:bold;">Siteye Giriş Yapıldı. Keyifli Vakit Geçiriniz!</span>`;
     } else {
-        // Üst Menü Butonları
         navAuth.innerHTML = `
             <button onclick="toggleModal('login')" class="btn" style="padding:8px 15px; font-size:14px; background:transparent; border:1px solid #7c3aed;">🔑 Giriş Yap</button>
             <button onclick="toggleModal('register')" class="btn" style="padding:8px 15px; font-size:14px;">📝 Kayıt Ol</button>
         `;
-        // Ortadaki Butonlar Ayrı Ayrı Yapıldı
         mainAuthBtn.innerHTML = `
             <button onclick="toggleModal('login')" class="btn">🔑 Giriş Yap</button>
             <button onclick="toggleModal('register')" class="btn btn-secondary">📝 Kayıt Ol</button>
