@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Monarch Network</title>
 
 <style>
@@ -21,6 +21,8 @@ scroll-behavior:smooth;
 body{
 background:#0f172a;
 color:white;
+/* Telefonlardaki alttan çıkan garip çubuklar butonları kapatmasın diye güvenli boşluk ekledik */
+padding-bottom: calc(100px + env(safe-area-inset-bottom));
 }
 
 /* --- MENÜ (NAVBAR) --- */
@@ -131,6 +133,20 @@ transform: translateY(-5px);
 .card h2{
 color:gold;
 margin-bottom:10px;
+}
+
+.player-count {
+display: inline-block;
+margin-top: 8px;
+padding: 4px 10px;
+background: #10b981;
+border-radius: 20px;
+font-size: 14px;
+font-weight: bold;
+}
+
+.player-count.offline {
+background: #ef4444;
 }
 
 footer{
@@ -253,9 +269,11 @@ font-size: 14px;
 <center id="mainAuthBtn"></center>
  
 <section class="cards">
+<!-- Aternos Canlı Sayaç Buraya Entegre Edildi -->
 <div class="card" id="ip" onclick="copyIP()">
 <h2>🎮 Sunucu IP</h2>
 <p>MonarchNetwork.aternos.me</p>
+<div id="mcStatus" class="player-count">Kontrol ediliyor...</div>
 </div>
 
 <div class="card" onclick="toggleSupportModal()">
@@ -309,12 +327,34 @@ font-size: 14px;
 </footer>
 
 <script>
-// ACİL DURUM TEMİZLİĞİ: Tarayıcıdaki kilitlenmiş eski veriyi tamamen temizler
-localStorage.clear();
+// Hafızayı temizlemek için üstteki "localStorage.clear();" satırını kaldırdım.
+// Böylece artık kayıt olduğun kullanıcılar silinmeyecek kanka!
 
 function copyIP(){
 navigator.clipboard.writeText("MonarchNetwork.aternos.me");
 alert("IP Kopyalandı: MonarchNetwork.aternos.me");
+}
+
+// ATERNOS CANLI OYUNCU SAYAÇ SİSTEMİ
+function updateServerStatus() {
+    const ip = "MonarchNetwork.aternos.me";
+    const statusElement = document.getElementById("mcStatus");
+    
+    fetch(`https://mcsrvstat.us{ip}`)
+        .then(response => response.json())
+        .then(data => {
+            if(data.online) {
+                statusElement.innerText = `🟢 ${data.players.online} / ${data.players.max} Aktif`;
+                statusElement.className = "player-count";
+            } else {
+                statusElement.innerText = `🔴 Sunucu Kapalı`;
+                statusElement.className = "player-count offline";
+            }
+        })
+        .catch(() => {
+            statusElement.innerText = `🔴 Durum Alınamadı`;
+            statusElement.className = "player-count offline";
+        });
 }
 
 function toggleModal(defaultMode = 'login') {
@@ -390,49 +430,4 @@ function loginProcess() {
         localStorage.setItem("loggedInUser", user);
         alert("Giriş başarılı!");
         document.getElementById("loginUser").value = "";
-        document.getElementById("loginPass").value = "";
-        toggleModal();
-        checkLogin();
-    } else {
-        alert("Kullanıcı adı veya şifre hatalı!");
-    }
-}
-
-function registerProcess() {
-    const user = document.getElementById("regUser").value.trim();
-    const email = document.getElementById("regEmail").value.trim();
-    const pass = document.getElementById("regPass").value;
-    const passRep = document.getElementById("regPassRep").value;
-
-    if(!user || !email || !pass || !passRep) {
-        alert("Lütfen tüm alanları doldurun!");
-        return;
-    }
-
-    if(pass !== passRep) {
-        alert("Şifreler eşleşmiyor!");
-        return;
-    }
-
-    if(localStorage.getItem("user_" + user)) {
-        alert("Bu kullanıcı adı zaten alınmış!");
-        return;
-    }
-
-    localStorage.setItem("user_" + user, pass);
-    alert("Kayıt başarılı! Şimdi aynı bilgilerle giriş yapabilirsiniz.");
-    document.getElementById("regUser").value = "";
-    document.getElementById("regEmail").value = "";
-    document.getElementById("regPass").value = "";
-    document.getElementById("regPassRep").value = "";
-    switchMode('login');
-}
-
-function supportProcess() {
-    const user = document.getElementById("supUser").value.trim();
-    const msg = document.getElementById("supMsg").value.trim();
-
-    if(!user || !msg) {
-        alert("Lütfen mesajınızı yazın!");
-        return;
-    }
+Kodu dikkatli kullanın.document.getElementById("loginPass").value = "";toggleModal();checkLogin();} else {alert("Kullanıcı adı veya şifre hatalı!");}}function registerProcess() {const user = document.getElementById("regUser").value.trim();const email = document.getElementById("regEmail").value.trim();const pass = document.getElementById("regPass").value;const passRep = document.getElementById("regPassRep").value;if(!user || !email || !pass || !passRep) {alert("Lütfen tüm alanları doldurun!");return;}if(pass !== passRep) {alert("Şifreler eşleşmiyor!");return;}if(localStorage.getItem("user_" + user)) {alert("Bu kullanıcı adı zaten alınmış!");return;}localStorage.setItem("user_" + user, pass);alert("Kayıt başarılı! Şimdi aynı bilgilerle giriş yapabilirsiniz.");document.getElementById("regUser").value = "";document.getElementById("regEmail").value = "";document.getElementById("regPass").value = "";document.getElementById("regPassRep").value = "";switchMode('login');}function supportProcess() {const user = document.getElementById("supUser").value.trim();const msg = document.getElementById("supMsg").value.trim();if(!user || !msg) {alert("Lütfen mesajınızı yazın!");return;}let ticketCount = localStorage.getItem("ticketCount") || 0;ticketCount++;localStorage.setItem("ticket_" + ticketCount, JSON.stringify({user, msg, date: new Date().toLocaleString()}));localStorage.setItem("ticketCount", ticketCount);alert("Destek talebiniz başarıyla alındı! En kısa sürede incelenecektir.");document.getElementById("supMsg").value = "";toggleSupportModal();}function logout() {localStorage.removeItem("loggedInUser");alert("Başarıyla çıkış yapıldı!");checkLogin();}// Sayfa ilk yüklendiğinde hem giriş kontrolünü yap hem sayacı çalıştırwindow.onload = function() {checkLogin();updateServerStatus();// Her 30 saniyede bir sayaç durumunu otomatik yenilersetInterval(updateServerStatus, 30000);};
