@@ -13,6 +13,10 @@ box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
 
+html{
+scroll-behavior:smooth;
+}
+
 body{
 background:#0f172a;
 color:white;
@@ -36,6 +40,10 @@ nav a{
 color:white;
 text-decoration:none;
 margin-left:20px;
+}
+
+nav a:hover{
+color:gold;
 }
 
 .hero{
@@ -97,22 +105,28 @@ margin-top:40px;
 
 <nav>
 <div class="logo">👑 MONARCH NETWORK</div>
+
 <div>
 #ipIP</a>
 #modlarModlar</a>
 #discordDiscord</a>
+giris.htmlGiriş Yap</a>
+kayit.htmlKayıt Ol</a>
 </div>
+
 </nav>
 
 <section class="hero">
 <h1>MONARCH NETWORK</h1>
+
 <p>Türkiye'nin Yeni Nesil Minecraft Sunucusu</p>
 
 <button class="btn" onclick="copyIP()">IP'yi Kopyala</button>
 </section>
 
-<section class="cards" id="ip">
-<div class="card">
+<section class="cards">
+
+<div class="card" id="ip">
 <h2>🎮 Sunucu IP</h2>
 <p>MonarchNetwork.aternos.me</p>
 </div>
@@ -126,6 +140,7 @@ margin-top:40px;
 <h2>⚔️ Oyun Modları</h2>
 <p>SMP • Survival • Etkinlikler</p>
 </div>
+
 </section>
 
 <footer>
