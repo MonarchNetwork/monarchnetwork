@@ -115,6 +115,12 @@ padding:25px;
 border-radius:15px;
 width:280px;
 text-align:center;
+cursor: pointer;
+transition: transform 0.2s;
+}
+
+.card:hover {
+transform: translateY(-5px);
 }
 
 .card h2{
@@ -174,7 +180,7 @@ color: gold;
 margin-bottom: 20px;
 }
 
-.modal-box input {
+.modal-box input, .modal-box textarea {
 width: 100%;
 padding: 12px;
 margin: 10px 0;
@@ -183,9 +189,10 @@ border-radius: 8px;
 background: #334155;
 color: white;
 outline: none;
+resize: none;
 }
 
-.modal-box input::placeholder {
+.modal-box input::placeholder, .modal-box textarea::placeholder {
 color: #cbd5e1;
 }
 
@@ -240,22 +247,24 @@ font-size: 14px;
 <center id="mainAuthBtn"></center>
  
 <section class="cards">
-<div class="card" id="ip">
+<div class="card" id="ip" onclick="copyIP()">
 <h2>🎮 Sunucu IP</h2>
 <p>MonarchNetwork.aternos.me</p>
 </div>
 
-<div class="card" id="discord">
-<h2>💬 Discord</h2>
-<p>Yakında Eklenecek</p>
+<!-- Destek hattına tıklama kontrolü eklendi -->
+<div class="card" onclick="toggleSupportModal()">
+<h2>💬 Destek Hattı</h2>
+<p>Sorun Bildir / Talep Aç</p>
 </div>
 
-<div class="card" id="modlar">
+<div class="card">
 <h2>⚔️ Oyun Modları</h2>
 <p>SMP • Survival • Etkinlikler</p>
 </div>
 </section>
 
+<!-- Giriş/Kayıt Modal Penceresi -->
 <div id="authModal" class="modal-overlay">
     <div class="modal-box">
         <span class="close-btn" onclick="toggleModal()">&times;</span>
@@ -280,6 +289,17 @@ font-size: 14px;
     </div>
 </div>
 
+<!-- Destek Talebi Modal Penceresi -->
+<div id="supportModal" class="modal-overlay">
+    <div class="modal-box">
+        <span class="close-btn" onclick="toggleSupportModal()">&times;</span>
+        <h2>💬 Destek Talebi</h2>
+        <input type="text" id="supUser" placeholder="Kullanıcı Adınız" readonly style="background:#1e293b; color:gold; font-weight:bold; text-align:center;">
+        <textarea id="supMsg" rows="4" placeholder="Yaşadığınız sorunu veya talebinizi yazın..."></textarea>
+        <button onclick="supportProcess()">Talebi Gönder</button>
+    </div>
+</div>
+
 <footer>
 © Monarch Network
 </footer>
@@ -295,6 +315,26 @@ function toggleModal(defaultMode = 'login') {
     modal.classList.toggle("active");
     if (modal.classList.contains("active")) {
         switchMode(defaultMode);
+    }
+}
+
+// Destek modalı giriş kontrolüne göre güncellendi
+function toggleSupportModal() {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    
+    // Eğer giriş yapılmadıysa uyarı ver ve giriş penceresini aç
+    if(!loggedInUser) {
+        alert("Destek talebi açabilmek için önce giriş yapmalısınız!");
+        toggleModal('login');
+        return;
+    }
+
+    const modal = document.getElementById("supportModal");
+    modal.classList.toggle("active");
+    
+    if(modal.classList.contains("active")) {
+        // Giriş yapan kullanıcının adını otomatik yaz ve değiştirilemez yap
+        document.getElementById("supUser").value = loggedInUser;
     }
 }
 
@@ -318,7 +358,6 @@ function checkLogin() {
             <span class="welcome-txt">👋 Hoş geldin, ${loggedInUser}!</span>
             <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
         `;
-        // İstediğin gibi "Siteye Giriş Yapıldı" olarak güncellendi kral
         mainAuthBtn.innerHTML = `<span style="color:gold; font-size:20px; font-weight:bold;">Siteye Giriş Yapıldı. Keyifli Vakit Geçiriniz!</span>`;
     } else {
         navAuth.innerHTML = `
@@ -346,10 +385,8 @@ function loginProcess() {
     if(savedPass && savedPass === pass) {
         localStorage.setItem("loggedInUser", user);
         alert("Giriş başarılı!");
-        
         document.getElementById("loginUser").value = "";
         document.getElementById("loginPass").value = "";
-        
         toggleModal();
         checkLogin();
     } else {
@@ -380,23 +417,18 @@ function registerProcess() {
 
     localStorage.setItem("user_" + user, pass);
     alert("Kayıt başarılı! Şimdi aynı bilgilerle giriş yapabilirsiniz.");
-    
     document.getElementById("regUser").value = "";
     document.getElementById("regEmail").value = "";
     document.getElementById("regPass").value = "";
     document.getElementById("regPassRep").value = "";
-    
     switchMode('login');
 }
 
-function logout() {
-    localStorage.removeItem("loggedInUser");
-    alert("Başarıyla çıkış yapıldı!");
-    checkLogin();
-}
+function supportProcess() {
+    const user = document.getElementById("supUser").value.trim();
+    const msg = document.getElementById("supMsg").value.trim();
 
-window.onload = checkLogin;
-</script>
-
-</body>
-</html>
+    if(!user || !msg) {
+        alert("Lütfen mesajınızı yazın!");
+        return;
+    }
