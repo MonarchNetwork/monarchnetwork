@@ -4,105 +4,61 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Monarch Network - Kayıt Ol</title>
-
 <style>
-body{
-background:#0b1020;
-font-family:Arial,sans-serif;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
-color:white;
-}
-
-.box{
-background:#1e293b;
-padding:40px;
-border-radius:15px;
-width:350px;
-text-align:center;
-}
-
-h1{
-color:gold;
-margin-bottom: 20px;
-}
-
-input{
-width:100%;
-padding:12px;
-margin:10px 0;
-border:none;
-border-radius:8px;
-background: #334155;
-color: white;
-outline: none;
-}
-
-input::placeholder {
-color: #cbd5e1;
-}
-
-button{
-width:100%;
-padding:12px;
-background:#7c3aed;
-border:none;
-border-radius:8px;
-color:white;
-cursor:pointer;
-font-weight: bold;
-margin-top: 10px;
-}
-
-button:hover{
-background:#6d28d9;
-}
-
-a{
-color:gold;
-text-decoration:none;
-font-weight: bold;
-}
-
-a:hover{
-text-decoration: underline;
-}
-
-p{
-margin: 15px 0;
-}
+body{background:#0b1020; font-family:Arial,sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; color:white;}
+.box{background:#1e293b; padding:40px; border-radius:15px; width:350px; text-align:center;}
+h1{color:gold; margin-bottom: 20px;}
+input{width:100%; padding:12px; margin:10px 0; border:none; border-radius:8px; background: #334155; color: white; outline: none;}
+input::placeholder {color: #cbd5e1;}
+button{width:100%; padding:12px; background:#7c3aed; border:none; border-radius:8px; color:white; cursor:pointer; font-weight: bold; margin-top: 10px;}
+button:hover{background:#6d28d9;}
+a{color:gold; text-decoration:none; font-weight: bold;}
+a:hover{text-decoration: underline;}
+p{margin: 15px 0;}
 </style>
 </head>
 <body>
 
 <div class="box">
-
-<h1>📝 Kayıt Ol</h1>
-
-<input type="text" placeholder="Kullanıcı Adı">
-
-<input type="email" placeholder="E-posta Adresi">
-
-<input type="password" placeholder="Şifre">
-
-<input type="password" placeholder="Şifre Tekrar">
-
-<button type="submit">Hesap Oluştur</button>
-
-<br><br>
-
-<p>
-    Zaten hesabın var mı? <a href="giris.html">Giriş Yap</a>
-</p>
- 
-<p>
-    <a href="index.html">🏠 Ana Sayfaya Dön</a>
-</p>
-
+    <h1>📝 Kayıt Ol</h1>
+    <input type="text" id="regUser" placeholder="Kullanıcı Adı" required>
+    <input type="email" id="regEmail" placeholder="E-posta Adresi" required>
+    <input type="password" id="regPass" placeholder="Şifre" required>
+    <input type="password" id="regPassRep" placeholder="Şifre Tekrar" required>
+    <button onclick="registerProcess()">Hesap Oluştur</button>
+    <br><br>
+    <p>Zaten hesabın var mı? <a href="giris.html">Giriş Yap</a></p>
+    <p><a href="index.html">🏠 Ana Sayfaya Dön</a></p>
 </div>
 
+<script>
+function registerProcess() {
+    const user = document.getElementById("regUser").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const pass = document.getElementById("regPass").value;
+    const passRep = document.getElementById("regPassRep").value;
+
+    if(!user || !email || !pass || !passRep) {
+        alert("Lütfen tüm alanları doldurun!");
+        return;
+    }
+
+    if(pass !== passRep) {
+        alert("Şifreler birbiriyle eşleşmiyor!");
+        return;
+    }
+
+    // Kullanıcı zaten var mı kontrolü
+    if(localStorage.getItem("user_" + user)) {
+        alert("Bu kullanıcı adı zaten alınmış!");
+        return;
+    }
+
+    // Kullanıcıyı tarayıcı hafızasına kaydet
+    localStorage.setItem("user_" + user, pass);
+    alert("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz.");
+    window.location.href = "giris.html";
+}
+</script>
 </body>
 </html>
