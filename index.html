@@ -87,6 +87,7 @@ font-size:18px;
 margin:5px;
 text-decoration: none;
 display: inline-block;
+font-weight: bold;
 }
 
 .btn:hover{
@@ -120,6 +121,98 @@ padding:20px;
 background:#111827;
 margin-top:40px;
 }
+
+/* --- AÇILIR PENCERE (MODAL) STİLLERİ --- */
+.modal-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.75);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+opacity: 0;
+pointer-events: none;
+transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+opacity: 1;
+pointer-events: auto;
+}
+
+.modal-box {
+background: #1e293b;
+padding: 40px;
+border-radius: 15px;
+width: 360px;
+text-align: center;
+position: relative;
+box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.close-btn {
+position: absolute;
+top: 15px;
+right: 20px;
+font-size: 24px;
+color: #cbd5e1;
+cursor: pointer;
+}
+
+.modal-box h2 {
+color: gold;
+margin-bottom: 20px;
+}
+
+.modal-box input {
+width: 100%;
+padding: 12px;
+margin: 10px 0;
+border: none;
+border-radius: 8px;
+background: #334155;
+color: white;
+outline: none;
+}
+
+.modal-box input::placeholder {
+color: #cbd5e1;
+}
+
+.modal-box button {
+width: 100%;
+padding: 12px;
+background: #7c3aed;
+border: none;
+border-radius: 8px;
+color: white;
+cursor: pointer;
+font-weight: bold;
+margin-top: 10px;
+}
+
+.modal-box button:hover {
+background: #6d28d9;
+}
+
+.modal-box a {
+color: gold;
+text-decoration: none;
+font-weight: bold;
+}
+
+.modal-box a:hover {
+text-decoration: underline;
+}
+
+.modal-box p {
+margin: 15px 0;
+font-size: 14px;
+}
 </style>
 </head>
 
@@ -127,7 +220,7 @@ margin-top:40px;
 
 <nav>
 <div class="logo">👑 MONARCH NETWORK</div>
-<!-- Giriş durumuna göre burası dinamik değişecek -->
+<!-- Giriş durumuna göre menü buraya yüklenecek -->
 <div id="navAuth" class="nav-user"></div>
 </nav>
 
@@ -159,45 +252,157 @@ margin-top:40px;
 </div>
 </section>
 
+<!-- --- BİRLEŞTİRİLMİŞ PENCERE (MODAL) --- -->
+<div id="authModal" class="modal-overlay">
+    <div class="modal-box">
+        <span class="close-btn" onclick="toggleModal()">&times;</span>
+        
+        <!-- Giriş Modu Alanı -->
+        <div id="loginForm">
+            <h2>🔑 Giriş Yap</h2>
+            <input type="text" id="loginUser" placeholder="Kullanıcı Adı">
+            <input type="password" id="loginPass" placeholder="Şifre">
+            <button onclick="loginProcess()">Giriş Yap</button>
+            <p>Hesabın yok mu? <a href="#" onclick="switchMode('register')">Kayıt Ol</a></p>
+        </div>
+
+        <!-- Kayıt Modu Alanı -->
+        <div id="registerForm" style="display: none;">
+            <h2>📝 Kayıt Ol</h2>
+            <input type="text" id="regUser" placeholder="Kullanıcı Adı">
+            <input type="email" id="regEmail" placeholder="E-posta Adresi">
+            <input type="password" id="regPass" placeholder="Şifre">
+            <input type="password" id="regPassRep" placeholder="Şifre Tekrar">
+            <button onclick="registerProcess()">Hesap Oluştur</button>
+            <p>Zaten hesabın var mı? <a href="#" onclick="switchMode('login')">Giriş Yap</a></p>
+        </div>
+    </div>
+</div>
+
 <footer>
 © Monarch Network
 </footer>
 
 <script>
-// IP Kopyalama Fonksiyonu
+// IP Kopyalama
 function copyIP(){
 navigator.clipboard.writeText("MonarchNetwork.aternos.me");
 alert("IP Kopyalandı: MonarchNetwork.aternos.me");
 }
 
-// Giriş Kontrolü
+// Pencereyi Açma / Kapatma (Belirli bir moda göre açabilir)
+function toggleModal(defaultMode = 'login') {
+    const modal = document.getElementById("authModal");
+    modal.classList.toggle("active");
+    if (modal.classList.contains("active")) {
+        switchMode(defaultMode);
+    }
+}
+
+// Giriş ve Kayıt formları arasında geçiş yapma
+function switchMode(mode) {
+    if(mode === 'register') {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("registerForm").style.display = "block";
+    } else {
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("registerForm").style.display = "none";
+    }
+}
+
+// Sistem Kontrolü (Sayfa Yüklendiğinde)
 function checkLogin() {
     const loggedInUser = localStorage.getItem("loggedInUser");
     const navAuth = document.getElementById("navAuth");
     const mainAuthBtn = document.getElementById("mainAuthBtn");
 
     if (loggedInUser) {
-        // Kullanıcı giriş yapmışsa
+        // Kullanıcı giriş yaptıysa menü ve butonlar
         navAuth.innerHTML = `
             <span class="welcome-txt">👋 Hoş geldin, ${loggedInUser}!</span>
             <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
         `;
         mainAuthBtn.innerHTML = `<span style="color:gold; font-size:20px; font-weight:bold;">Sunucuya Giriş Yapıldı. Keyifli Oyunlar!</span>`;
     } else {
-        // Kullanıcı giriş yapmamışsa
-        navAuth.innerHTML = `<a href="giris.html" class="btn" style="padding:8px 15px; font-size:14px;">🔑 Giriş Yap</a>`;
-        mainAuthBtn.innerHTML = `<a href="giris.html" class="btn">🔑 Giriş Yap</a>`;
+        // Kullanıcı giriş yapmadıysa menüye "Kayıt Ol" butonu da eklendi
+        navAuth.innerHTML = `
+            <button onclick="toggleModal('login')" class="btn" style="padding:8px 15px; font-size:14px; background:transparent; border:1px solid #7c3aed;">🔑 Giriş Yap</button>
+            <button onclick="toggleModal('register')" class="btn" style="padding:8px 15px; font-size:14px;">📝 Kayıt Ol</button>
+        `;
+        mainAuthBtn.innerHTML = `<button onclick="toggleModal('login')" class="btn">🔑 Giriş Yap / Kayıt Ol</button>`;
     }
 }
 
-// Çıkış Yapma Fonksiyonu
+// Giriş Yapma İşlemi
+function loginProcess() {
+    const user = document.getElementById("loginUser").value.trim();
+    const pass = document.getElementById("loginPass").value;
+
+    if(!user || !pass) {
+        alert("Lütfen tüm alanları doldurun!");
+        return;
+    }
+
+    const savedPass = localStorage.getItem("user_" + user);
+
+    if(savedPass && savedPass === pass) {
+        localStorage.setItem("loggedInUser", user);
+        alert("Giriş başarılı!");
+        
+        // Formları temizle
+        document.getElementById("loginUser").value = "";
+        document.getElementById("loginPass").value = "";
+        
+        toggleModal(); // Pencereyi kapat
+        checkLogin();  // Arayüzü yenile
+    } else {
+        alert("Kullanıcı adı veya şifre hatalı!");
+    }
+}
+
+// Kayıt Olma İşlemi
+function registerProcess() {
+    const user = document.getElementById("regUser").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const pass = document.getElementById("regPass").value;
+    const passRep = document.getElementById("regPassRep").value;
+
+    if(!user || !email || !pass || !passRep) {
+        alert("Lütfen tüm alanları doldurun!");
+        return;
+    }
+
+    if(pass !== passRep) {
+        alert("Şifreler eşleşmiyor!");
+        return;
+    }
+
+    if(localStorage.getItem("user_" + user)) {
+        alert("Bu kullanıcı adı zaten alınmış!");
+        return;
+    }
+
+    // Bilgileri yerel hafızaya kaydet
+    localStorage.setItem("user_" + user, pass);
+    alert("Kayıt başarılı! Şimdi aynı bilgilerle giriş yapabilirsiniz.");
+    
+    // Formları temizle
+    document.getElementById("regUser").value = "";
+    document.getElementById("regEmail").value = "";
+    document.getElementById("regPass").value = "";
+    document.getElementById("regPassRep").value = "";
+    
+    switchMode('login'); // Giriş yapma moduna geçiş yap
+}
+
+// Çıkış Yapma
 function logout() {
     localStorage.removeItem("loggedInUser");
     alert("Başarıyla çıkış yapıldı!");
-    window.location.reload();
+    checkLogin();
 }
 
-// Sayfa açıldığında kontrol et
+// Sayfa ilk yüklendiğinde durumu denetle
 window.onload = checkLogin;
 </script>
 
