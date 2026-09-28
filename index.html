@@ -14,7 +14,7 @@ font-family:Arial,sans-serif;
 }
 
 body{
-background:#0b1020;
+background:#050b1f;
 color:white;
 }
 
@@ -23,8 +23,8 @@ background:#111827;
 padding:15px;
 display:flex;
 justify-content:center;
+gap:20px;
 flex-wrap:wrap;
-gap:15px;
 }
 
 nav a{
@@ -43,38 +43,39 @@ padding:100px 20px;
 }
 
 .hero h1{
-font-size:65px;
+font-size:64px;
 color:gold;
 }
 
 .hero p{
-margin-top:10px;
-font-size:20px;
+font-size:22px;
+margin-top:15px;
 }
 
-button{
-margin-top:20px;
-padding:15px 25px;
+.btn{
+padding:15px 30px;
 border:none;
 border-radius:10px;
 background:#7c3aed;
 color:white;
+font-size:18px;
 cursor:pointer;
+margin:8px;
 }
 
 .cards{
 display:flex;
-flex-wrap:wrap;
 justify-content:center;
+flex-wrap:wrap;
 gap:20px;
-padding:40px 20px;
+padding:50px 20px;
 }
 
 .card{
 background:#1e293b;
+width:300px;
 padding:25px;
 border-radius:15px;
-width:280px;
 text-align:center;
 }
 
@@ -84,67 +85,39 @@ margin-bottom:10px;
 }
 
 footer{
+background:#111827;
 text-align:center;
 padding:20px;
-background:#111827;
-margin-top:30px;
+margin-top:40px;
 }
 </style>
-</head>
 
+<script>
+function copyIP(){
+navigator.clipboard.writeText("MonarchNetwork.aternos.me");
+alert("IP Kopyalandı!");
+}
+</script>
+
+</head>
 <body>
 
 <nav>
-#🏠 Anasayfa</a>
-#🔑 Giriş Yap</a>
-#📝 Kayıt Ol</a>
+index.html🏠 Anasayfa</a>
+giris.html🔑 Giriş Yap</a>
+kayit.html📝 Kayıt Ol</a>
 #🛠️ Destek</a>
 #⚖️ Cezalar</a>
 #💎 Kredi Yükle</a>
 #🛒 Mağaza</a>
 </nav>
 
-<div class="hero">
+<section class="hero">
 <h1>👑 MONARCH NETWORK</h1>
+
 <p>Türkiye'nin Yeni Nesil Minecraft Sunucusu</p>
 
-<button onclick="copyIP()">IP'yi Kopyala</button>
-</div>
+<button class="btn" onclick="copyIP()">IP'yi Kopyala</button>
 
-<div class="cards">
-
-<div class="card">
-<h2>🎮 Sunucu IP</h2>
-<p>MonarchNetwork.aternos.me</p>
-</div>
-
-<div class="card">
-<h2>💬 Discord</h2>
-<p>Yakında eklenecek</p>
-</div>
-
-<div class="card">
-<h2>⚔️ Oyun Modları</h2>
-<p>SMP • Survival • Etkinlikler</p>
-</div>
-
-<div class="card">
-<h2>🛠️ Destek</h2>
-<p>Yakında aktif olacak.</p>
-</div>
-
-</div>
-
-<footer>
-© Monarch Network
-</footer>
-
-<script>
-function copyIP(){
-navigator.clipboard.writeText("MonarchNetwork.aternos.me");
-alert("IP kopyalandı!");
-}
-</script>
-
-</body>
-</html>
+giris.html
+<button class="btn">Giri
