@@ -2,11 +2,10 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Monarch Network</title>
 
 <style>
-/* --- GENEL TASARIM AYARLARI --- */
 *{
 margin:0;
 padding:0;
@@ -21,11 +20,8 @@ scroll-behavior:smooth;
 body{
 background:#0f172a;
 color:white;
-/* Telefonlardaki alttan çıkan garip çubuklar butonları kapatmasın diye güvenli boşluk ekledik */
-padding-bottom: calc(100px + env(safe-area-inset-bottom));
 }
 
-/* --- MENÜ (NAVBAR) --- */
 nav{
 display:flex;
 justify-content:space-between;
@@ -65,7 +61,6 @@ font-weight: bold;
 background: #dc2626;
 }
 
-/* --- HERO (ANA TANITIM ALANI) --- */
 .hero{
 text-align:center;
 padding:120px 20px;
@@ -81,7 +76,6 @@ font-size:22px;
 margin:15px 0;
 }
 
-/* --- BUTONLAR --- */
 .btn{
 padding:15px 30px;
 background:#7c3aed;
@@ -107,7 +101,6 @@ background: #3b82f6;
 background: #2563eb;
 }
 
-/* --- KARTLAR (BİLGİ KUTULARI) --- */
 .cards{
 display:flex;
 justify-content:center;
@@ -122,31 +115,11 @@ padding:25px;
 border-radius:15px;
 width:280px;
 text-align:center;
-cursor: pointer;
-transition: transform 0.2s;
-}
-
-.card:hover {
-transform: translateY(-5px);
 }
 
 .card h2{
 color:gold;
 margin-bottom:10px;
-}
-
-.player-count {
-display: inline-block;
-margin-top: 8px;
-padding: 4px 10px;
-background: #10b981;
-border-radius: 20px;
-font-size: 14px;
-font-weight: bold;
-}
-
-.player-count.offline {
-background: #ef4444;
 }
 
 footer{
@@ -156,7 +129,6 @@ background:#111827;
 margin-top:40px;
 }
 
-/* --- AÇILIR PENCERELER --- */
 .modal-overlay {
 position: fixed;
 top: 0;
@@ -202,7 +174,7 @@ color: gold;
 margin-bottom: 20px;
 }
 
-.modal-box input, .modal-box textarea {
+.modal-box input {
 width: 100%;
 padding: 12px;
 margin: 10px 0;
@@ -211,10 +183,9 @@ border-radius: 8px;
 background: #334155;
 color: white;
 outline: none;
-resize: none;
 }
 
-.modal-box input::placeholder, .modal-box textarea::placeholder {
+.modal-box input::placeholder {
 color: #cbd5e1;
 }
 
@@ -269,25 +240,22 @@ font-size: 14px;
 <center id="mainAuthBtn"></center>
  
 <section class="cards">
-<!-- Aternos Canlı Sayaç Buraya Entegre Edildi -->
-<div class="card" id="ip" onclick="copyIP()">
+<div class="card" id="ip">
 <h2>🎮 Sunucu IP</h2>
 <p>MonarchNetwork.aternos.me</p>
-<div id="mcStatus" class="player-count">Kontrol ediliyor...</div>
 </div>
 
-<div class="card" onclick="toggleSupportModal()">
-<h2>💬 Destek Hattı</h2>
-<p>Sorun Bildir / Talep Aç</p>
+<div class="card" id="discord">
+<h2>💬 Discord</h2>
+<p>Yakında Eklenecek</p>
 </div>
 
-<div class="card">
+<div class="card" id="modlar">
 <h2>⚔️ Oyun Modları</h2>
 <p>SMP • Survival • Etkinlikler</p>
 </div>
 </section>
 
-<!-- PENCERELER -->
 <div id="authModal" class="modal-overlay">
     <div class="modal-box">
         <span class="close-btn" onclick="toggleModal()">&times;</span>
@@ -312,49 +280,14 @@ font-size: 14px;
     </div>
 </div>
 
-<div id="supportModal" class="modal-overlay">
-    <div class="modal-box">
-        <span class="close-btn" onclick="toggleSupportModal()">&times;</span>
-        <h2>💬 Destek Talebi</h2>
-        <input type="text" id="supUser" placeholder="Kullanıcı Adınız" readonly style="background:#1e293b; color:gold; font-weight:bold; text-align:center;">
-        <textarea id="supMsg" rows="4" placeholder="Yaşadığınız sorunu veya talebinizi yazın..."></textarea>
-        <button onclick="supportProcess()">Talebi Gönder</button>
-    </div>
-</div>
-
 <footer>
 © Monarch Network
 </footer>
 
 <script>
-// Hafızayı temizlemek için üstteki "localStorage.clear();" satırını kaldırdım.
-// Böylece artık kayıt olduğun kullanıcılar silinmeyecek kanka!
-
 function copyIP(){
 navigator.clipboard.writeText("MonarchNetwork.aternos.me");
 alert("IP Kopyalandı: MonarchNetwork.aternos.me");
-}
-
-// ATERNOS CANLI OYUNCU SAYAÇ SİSTEMİ
-function updateServerStatus() {
-    const ip = "MonarchNetwork.aternos.me";
-    const statusElement = document.getElementById("mcStatus");
-    
-    fetch(`https://mcsrvstat.us{ip}`)
-        .then(response => response.json())
-        .then(data => {
-            if(data.online) {
-                statusElement.innerText = `🟢 ${data.players.online} / ${data.players.max} Aktif`;
-                statusElement.className = "player-count";
-            } else {
-                statusElement.innerText = `🔴 Sunucu Kapalı`;
-                statusElement.className = "player-count offline";
-            }
-        })
-        .catch(() => {
-            statusElement.innerText = `🔴 Durum Alınamadı`;
-            statusElement.className = "player-count offline";
-        });
 }
 
 function toggleModal(defaultMode = 'login') {
@@ -362,23 +295,6 @@ function toggleModal(defaultMode = 'login') {
     modal.classList.toggle("active");
     if (modal.classList.contains("active")) {
         switchMode(defaultMode);
-    }
-}
-
-function toggleSupportModal() {
-    const loggedInUser = localStorage.getItem("loggedInUser");
-    
-    if(!loggedInUser) {
-        alert("Destek talebi açabilmek için önce giriş yapmalısınız!");
-        toggleModal('login');
-        return;
-    }
-
-    const modal = document.getElementById("supportModal");
-    modal.classList.toggle("active");
-    
-    if(modal.classList.contains("active")) {
-        document.getElementById("supUser").value = loggedInUser;
     }
 }
 
@@ -402,7 +318,8 @@ function checkLogin() {
             <span class="welcome-txt">👋 Hoş geldin, ${loggedInUser}!</span>
             <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
         `;
-        mainAuthBtn.innerHTML = `<span style="color:gold; font-size:25px; font-weight:bold; display:block; margin:20px 0;">Siteye Giriş Yapıldı. Keyifli Vakit Geçiriniz!</span>`;
+        // İstediğin gibi "Siteye Giriş Yapıldı" olarak güncellendi kral
+        mainAuthBtn.innerHTML = `<span style="color:gold; font-size:20px; font-weight:bold;">Siteye Giriş Yapıldı. Keyifli Vakit Geçiriniz!</span>`;
     } else {
         navAuth.innerHTML = `
             <button onclick="toggleModal('login')" class="btn" style="padding:8px 15px; font-size:14px; background:transparent; border:1px solid #7c3aed;">🔑 Giriş Yap</button>
@@ -429,5 +346,57 @@ function loginProcess() {
     if(savedPass && savedPass === pass) {
         localStorage.setItem("loggedInUser", user);
         alert("Giriş başarılı!");
+        
         document.getElementById("loginUser").value = "";
-Kodu dikkatli kullanın.document.getElementById("loginPass").value = "";toggleModal();checkLogin();} else {alert("Kullanıcı adı veya şifre hatalı!");}}function registerProcess() {const user = document.getElementById("regUser").value.trim();const email = document.getElementById("regEmail").value.trim();const pass = document.getElementById("regPass").value;const passRep = document.getElementById("regPassRep").value;if(!user || !email || !pass || !passRep) {alert("Lütfen tüm alanları doldurun!");return;}if(pass !== passRep) {alert("Şifreler eşleşmiyor!");return;}if(localStorage.getItem("user_" + user)) {alert("Bu kullanıcı adı zaten alınmış!");return;}localStorage.setItem("user_" + user, pass);alert("Kayıt başarılı! Şimdi aynı bilgilerle giriş yapabilirsiniz.");document.getElementById("regUser").value = "";document.getElementById("regEmail").value = "";document.getElementById("regPass").value = "";document.getElementById("regPassRep").value = "";switchMode('login');}function supportProcess() {const user = document.getElementById("supUser").value.trim();const msg = document.getElementById("supMsg").value.trim();if(!user || !msg) {alert("Lütfen mesajınızı yazın!");return;}let ticketCount = localStorage.getItem("ticketCount") || 0;ticketCount++;localStorage.setItem("ticket_" + ticketCount, JSON.stringify({user, msg, date: new Date().toLocaleString()}));localStorage.setItem("ticketCount", ticketCount);alert("Destek talebiniz başarıyla alındı! En kısa sürede incelenecektir.");document.getElementById("supMsg").value = "";toggleSupportModal();}function logout() {localStorage.removeItem("loggedInUser");alert("Başarıyla çıkış yapıldı!");checkLogin();}// Sayfa ilk yüklendiğinde hem giriş kontrolünü yap hem sayacı çalıştırwindow.onload = function() {checkLogin();updateServerStatus();// Her 30 saniyede bir sayaç durumunu otomatik yenilersetInterval(updateServerStatus, 30000);};
+        document.getElementById("loginPass").value = "";
+        
+        toggleModal();
+        checkLogin();
+    } else {
+        alert("Kullanıcı adı veya şifre hatalı!");
+    }
+}
+
+function registerProcess() {
+    const user = document.getElementById("regUser").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const pass = document.getElementById("regPass").value;
+    const passRep = document.getElementById("regPassRep").value;
+
+    if(!user || !email || !pass || !passRep) {
+        alert("Lütfen tüm alanları doldurun!");
+        return;
+    }
+
+    if(pass !== passRep) {
+        alert("Şifreler eşleşmiyor!");
+        return;
+    }
+
+    if(localStorage.getItem("user_" + user)) {
+        alert("Bu kullanıcı adı zaten alınmış!");
+        return;
+    }
+
+    localStorage.setItem("user_" + user, pass);
+    alert("Kayıt başarılı! Şimdi aynı bilgilerle giriş yapabilirsiniz.");
+    
+    document.getElementById("regUser").value = "";
+    document.getElementById("regEmail").value = "";
+    document.getElementById("regPass").value = "";
+    document.getElementById("regPassRep").value = "";
+    
+    switchMode('login');
+}
+
+function logout() {
+    localStorage.removeItem("loggedInUser");
+    alert("Başarıyla çıkış yapıldı!");
+    checkLogin();
+}
+
+window.onload = checkLogin;
+</script>
+
+</body>
+</html>
