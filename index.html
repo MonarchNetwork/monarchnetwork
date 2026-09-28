@@ -6,6 +6,7 @@
 <title>Monarch Network</title>
 
 <style>
+/* --- GENEL TASARIM AYARLARI --- */
 *{
 margin:0;
 padding:0;
@@ -22,6 +23,7 @@ background:#0f172a;
 color:white;
 }
 
+/* --- MENÜ (NAVBAR) --- */
 nav{
 display:flex;
 justify-content:space-between;
@@ -61,6 +63,7 @@ font-weight: bold;
 background: #dc2626;
 }
 
+/* --- HERO (ANA TANITIM ALANI) --- */
 .hero{
 text-align:center;
 padding:120px 20px;
@@ -76,6 +79,7 @@ font-size:22px;
 margin:15px 0;
 }
 
+/* --- BUTONLAR --- */
 .btn{
 padding:15px 30px;
 background:#7c3aed;
@@ -101,6 +105,7 @@ background: #3b82f6;
 background: #2563eb;
 }
 
+/* --- KARTLAR (BİLGİ KUTULARI) --- */
 .cards{
 display:flex;
 justify-content:center;
@@ -135,6 +140,7 @@ background:#111827;
 margin-top:40px;
 }
 
+/* --- AÇILIR PENCERELER --- */
 .modal-overlay {
 position: fixed;
 top: 0;
@@ -252,7 +258,6 @@ font-size: 14px;
 <p>MonarchNetwork.aternos.me</p>
 </div>
 
-<!-- Destek hattına tıklama kontrolü eklendi -->
 <div class="card" onclick="toggleSupportModal()">
 <h2>💬 Destek Hattı</h2>
 <p>Sorun Bildir / Talep Aç</p>
@@ -264,7 +269,7 @@ font-size: 14px;
 </div>
 </section>
 
-<!-- Giriş/Kayıt Modal Penceresi -->
+<!-- PENCERELER -->
 <div id="authModal" class="modal-overlay">
     <div class="modal-box">
         <span class="close-btn" onclick="toggleModal()">&times;</span>
@@ -289,7 +294,6 @@ font-size: 14px;
     </div>
 </div>
 
-<!-- Destek Talebi Modal Penceresi -->
 <div id="supportModal" class="modal-overlay">
     <div class="modal-box">
         <span class="close-btn" onclick="toggleSupportModal()">&times;</span>
@@ -305,6 +309,9 @@ font-size: 14px;
 </footer>
 
 <script>
+// ACİL DURUM TEMİZLİĞİ: Tarayıcıdaki kilitlenmiş eski veriyi tamamen temizler
+localStorage.clear();
+
 function copyIP(){
 navigator.clipboard.writeText("MonarchNetwork.aternos.me");
 alert("IP Kopyalandı: MonarchNetwork.aternos.me");
@@ -318,11 +325,9 @@ function toggleModal(defaultMode = 'login') {
     }
 }
 
-// Destek modalı giriş kontrolüne göre güncellendi
 function toggleSupportModal() {
     const loggedInUser = localStorage.getItem("loggedInUser");
     
-    // Eğer giriş yapılmadıysa uyarı ver ve giriş penceresini aç
     if(!loggedInUser) {
         alert("Destek talebi açabilmek için önce giriş yapmalısınız!");
         toggleModal('login');
@@ -333,7 +338,6 @@ function toggleSupportModal() {
     modal.classList.toggle("active");
     
     if(modal.classList.contains("active")) {
-        // Giriş yapan kullanıcının adını otomatik yaz ve değiştirilemez yap
         document.getElementById("supUser").value = loggedInUser;
     }
 }
@@ -358,7 +362,7 @@ function checkLogin() {
             <span class="welcome-txt">👋 Hoş geldin, ${loggedInUser}!</span>
             <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
         `;
-        mainAuthBtn.innerHTML = `<span style="color:gold; font-size:20px; font-weight:bold;">Siteye Giriş Yapıldı. Keyifli Vakit Geçiriniz!</span>`;
+        mainAuthBtn.innerHTML = `<span style="color:gold; font-size:25px; font-weight:bold; display:block; margin:20px 0;">Siteye Giriş Yapıldı. Keyifli Vakit Geçiriniz!</span>`;
     } else {
         navAuth.innerHTML = `
             <button onclick="toggleModal('login')" class="btn" style="padding:8px 15px; font-size:14px; background:transparent; border:1px solid #7c3aed;">🔑 Giriş Yap</button>
