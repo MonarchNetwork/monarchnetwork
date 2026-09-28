@@ -1,13 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Monarch Network</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 10%;
+background:#111827;
+}
+
+.logo{
+color:gold;
+font-size:28px;
+font-weight:bold;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+}
+
+.hero{
+text-align:center;
+padding:120px 20px;
+}
+
+.hero h1{
+font-size:70px;
+color:gold;
+}
+
+.hero p{
+font-size:22px;
+margin:15px 0;
+}
+
+.btn{
+padding:15px 30px;
+background:#7c3aed;
+border:none;
+border-radius:10px;
+color:white;
+cursor:pointer;
+font-size:18px;
+margin:5px;
+}
+
+.cards{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+padding:50px 20px;
+}
+
+.card{
+background:#1e293b;
+padding:25px;
+border-radius:15px;
+width:280px;
+}
+
+.card h2{
+color:gold;
+margin-bottom:10px;
+}
+
+footer{
+text-align:center;
+padding:20px;
+background:#111827;
+margin-top:40px;
+}
+</style>
 </head>
-<body style="background:#0f172a;color:white;text-align:center;font-family:Arial;padding-top:100px;">
-<h1 style="color:gold;">MONARCH NETWORK</h1>
+
+<body>
+
+<nav>
+<div class="logo">👑 MONARCH NETWORK</div>
+<div>
+#ipIP</a>
+#modlarModlar</a>
+#discordDiscord</a>
+</div>
+</nav>
+
+<section class="hero">
+<h1>MONARCH NETWORK</h1>
 <p>Türkiye'nin Yeni Nesil Minecraft Sunucusu</p>
-<button onclick="navigator.clipboard.writeText('play.monarchnetwork.net')">
-IP'yi Kopyala
-</button>
+
+<button class="btn" onclick="copyIP()">IP'yi Kopyala</button>
+</section>
+
+<section class="cards" id="ip">
+<div class="card">
+<h2>🎮 Sunucu IP</h2>
+<p>MonarchNetwork.aternos.me</p>
+</div>
+
+<div class="card" id="discord">
+<h2>💬 Discord</h2>
+<p>Yakında Eklenecek</p>
+</div>
+
+<div class="card" id="modlar">
+<h2>⚔️ Oyun Modları</h2>
+<p>SMP • Survival • Etkinlikler</p>
+</div>
+</section>
+
+<footer>
+© Monarch Network
+</footer>
+
+<script>
+function copyIP(){
+navigator.clipboard.writeText("MonarchNetwork.aternos.me");
+alert("IP Kopyalandı: MonarchNetwork.aternos.me");
+}
+</script>
+
 </body>
 </html>
