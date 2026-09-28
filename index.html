@@ -3,106 +3,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monarch Network - Kayıt Ol</title>
+<title>Monarch Network</title>
 
 <style>
-body{
-background:#0b1020;
-font-family:Arial,sans-serif;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+background:#0f172a;
 color:white;
 }
 
-.box{
-background:#1e293b;
-padding:40px;
-border-radius:15px;
-width:350px;
-text-align:center;
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 10%;
+background:#111827;
 }
 
-h1{
+.logo{
 color:gold;
-margin-bottom: 20px;
+font-size:28px;
+font-weight:bold;
 }
 
-input{
-width:100%;
-padding:12px;
-margin:10px 0;
-border:none;
-border-radius:8px;
-background: #334155;
+.nav-user {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+
+.welcome-txt {
+color: gold;
+font-weight: bold;
+}
+
+.logout-btn {
+background: #ef4444;
+padding: 8px 15px;
+border: none;
+border-radius: 5px;
 color: white;
-outline: none;
+cursor: pointer;
+font-weight: bold;
 }
 
-input::placeholder {
-color: #cbd5e1;
+.logout-btn:hover {
+background: #dc2626;
 }
 
-button{
-width:100%;
-padding:12px;
+.hero{
+text-align:center;
+padding:120px 20px;
+}
+
+.hero h1{
+font-size:70px;
+color:gold;
+}
+
+.hero p{
+font-size:22px;
+margin:15px 0;
+}
+
+.btn{
+padding:15px 30px;
 background:#7c3aed;
 border:none;
-border-radius:8px;
+border-radius:10px;
 color:white;
 cursor:pointer;
-font-weight: bold;
-margin-top: 10px;
+font-size:18px;
+margin:5px;
+text-decoration: none;
+display: inline-block;
 }
 
-button:hover{
+.btn:hover{
 background:#6d28d9;
 }
 
-a{
+.cards{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+padding:50px 20px;
+}
+
+.card{
+background:#1e293b;
+padding:25px;
+border-radius:15px;
+width:280px;
+text-align:center;
+}
+
+.card h2{
 color:gold;
-text-decoration:none;
-font-weight: bold;
+margin-bottom:10px;
 }
 
-a:hover{
-text-decoration: underline;
-}
-
-p{
-margin: 15px 0;
+footer{
+text-align:center;
+padding:20px;
+background:#111827;
+margin-top:40px;
 }
 </style>
 </head>
+
 <body>
 
-<div class="box">
+<nav>
+<div class="logo">👑 MONARCH NETWORK</div>
+<!-- Giriş durumuna göre burası dinamik değişecek -->
+<div id="navAuth" class="nav-user"></div>
+</nav>
 
-<h1>📝 Kayıt Ol</h1>
-
-<input type="text" placeholder="Kullanıcı Adı">
-
-<input type="email" placeholder="E-posta Adresi">
-
-<input type="password" placeholder="Şifre">
-
-<input type="password" placeholder="Şifre Tekrar">
-
-<button type="submit">Hesap Oluştur</button>
-
+<section class="hero">
+<h1>MONARCH NETWORK</h1>
+<p>Türkiye'nin Yeni Nesil Minecraft Sunucusu</p>
+<button class="btn" onclick="copyIP()">IP'yi Kopyala</button>
+</section>
+  
 <br><br>
 
-<p>
-    Zaten hesabın var mı? <a href="giris.html">Giriş Yap</a>
-</p>
+<!-- Orta alandaki giriş butonu durumu -->
+<center id="mainAuthBtn"></center>
  
-<p>
-    <a href="index.html">🏠 Ana Sayfaya Dön</a>
-</p>
-
+<section class="cards">
+<div class="card" id="ip">
+<h2>🎮 Sunucu IP</h2>
+<p>MonarchNetwork.aternos.me</p>
 </div>
+
+<div class="card" id="discord">
+<h2>💬 Discord</h2>
+<p>Yakında Eklenecek</p>
+</div>
+
+<div class="card" id="modlar">
+<h2>⚔️ Oyun Modları</h2>
+<p>SMP • Survival • Etkinlikler</p>
+</div>
+</section>
+
+<footer>
+© Monarch Network
+</footer>
+
+<script>
+// IP Kopyalama Fonksiyonu
+function copyIP(){
+navigator.clipboard.writeText("MonarchNetwork.aternos.me");
+alert("IP Kopyalandı: MonarchNetwork.aternos.me");
+}
+
+// Giriş Kontrolü
+function checkLogin() {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    const navAuth = document.getElementById("navAuth");
+    const mainAuthBtn = document.getElementById("mainAuthBtn");
+
+    if (loggedInUser) {
+        // Kullanıcı giriş yapmışsa
+        navAuth.innerHTML = `
+            <span class="welcome-txt">👋 Hoş geldin, ${loggedInUser}!</span>
+            <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
+        `;
+        mainAuthBtn.innerHTML = `<span style="color:gold; font-size:20px; font-weight:bold;">Sunucuya Giriş Yapıldı. Keyifli Oyunlar!</span>`;
+    } else {
+        // Kullanıcı giriş yapmamışsa
+        navAuth.innerHTML = `<a href="giris.html" class="btn" style="padding:8px 15px; font-size:14px;">🔑 Giriş Yap</a>`;
+        mainAuthBtn.innerHTML = `<a href="giris.html" class="btn">🔑 Giriş Yap</a>`;
+    }
+}
+
+// Çıkış Yapma Fonksiyonu
+function logout() {
+    localStorage.removeItem("loggedInUser");
+    alert("Başarıyla çıkış yapıldı!");
+    window.location.reload();
+}
+
+// Sayfa açıldığında kontrol et
+window.onload = checkLogin;
+</script>
 
 </body>
 </html>
