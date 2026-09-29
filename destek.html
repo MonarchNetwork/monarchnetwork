@@ -159,6 +159,7 @@ margin-top:60px;
         <div class="form-group">
             <label for="ticketCategory">📌 Talep Kategorisi</label>
             <select id="ticketCategory" required>
+                <option value="Ceza İtirazı">⚖️ Ceza İtirazı </option>
                 <option value="" disabled selected>Bir kategori seçin...</option>
                 <option value="Oyuncu Şikayeti">⚔️ Oyuncu Şikayeti / Rapor</option>
                 <option value="Hata Bildirimi (Bug)">🐛 Hata Bildirimi (Bug)</option>
@@ -177,7 +178,11 @@ margin-top:60px;
             <label for="ticketMessage">💬 Mesajınız</label>
             <textarea id="ticketMessage" placeholder="Sorununuzu, tarihlerini veya şikayetçi olduğunuz oyuncu adını buraya detaylıca yazın..." required></textarea>
         </div>
-
+<!-- FOTOĞRAF YÜKLEME ALANI -->
+<div class="form-group" style="margin-top: 20px;">
+    <label>📸 Ekran Görüntüsü / Kanıt (Opsiyonel)</label>
+    <input type="file" id="ticketFile" accept="image/*" style="background: #334155; padding: 10px; width: 100%; border-radius: 8px; color: white;">
+</div>
         <button type="submit" class="submit-btn">Talebi Gönder</button>
     </form>
     
