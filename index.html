@@ -235,6 +235,19 @@ color: white;
 .status-offline {
 background: #ef4444;
 color: white;
+.market-section { padding: 60px 20px; background: #111827; text-align: center; display: none; }
+.market-section h2.section-title { color: gold; font-size: 36px; margin-bottom: 10px; }
+.market-section p.section-subtitle { color: #cbd5e1; font-size: 18px; margin-bottom: 40px; }
+.market-cards { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; }
+.market-card { background: #1e293b; border: 2px solid #334155; border-radius: 20px; width: 300px; padding: 30px; text-align: center; transition: transform 0.3s ease, border-color 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; }
+.market-card:hover { transform: translateY(-10px); border-color: gold; }
+.vip-title { font-size: 26px; color: gold; font-weight: bold; margin-bottom: 15px; }
+.vip-price { font-size: 32px; font-weight: bold; color: #10b981; margin-bottom: 20px; }
+.vip-features { list-style: none; text-align: left; margin-bottom: 30px; color: #cbd5e1; font-size: 15px; }
+.vip-features li { margin: 10px 0; position: relative; padding-left: 20px; }
+.vip-features li::before { content: "✔"; position: absolute; left: 0; color: #10b981; font-weight: bold; }
+.buy-btn { background: gold; color: #0f172a; padding: 12px 20px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+.buy-btn:hover { background: #e6c200; }
 }
 </style>
 </head>
@@ -276,8 +289,54 @@ color: white;
 <p>SMP • Survival • Etkinlikler</p>
 </div>
 </section>
+  <section id="marketSection" class="market-section">
+    <h2 class="section-title">👑 Sunucu Marketi</h2>
+    <p class="section-subtitle">Monarch Network kalitesini VIP paketleriyle zirveye taşı!</p>
+    <div class="market-cards">
+        <div class="market-card">
+            <div>
+                <div class="vip-title">VIP</div>
+                <div class="vip-price">50 TL <span style="font-size:14px; color:#cbd5e1;">/ Aylık</span></div>
+                <ul class="vip-features">
+                    <li>[VIP] Özel Prefiksi</li>
+                    <li>Sıra Beklemeden Giriş Hakkı</li>
+                    <li>/feed Komutu</li>
+                    <li>Özel Sohbet Rengi</li>
+                </ul>
+            </div>
+            <button class="buy-btn" onclick="buyVIP('VIP')">Satın Al</button>
+        </div>
+        <div class="market-card" style="border-color: #7c3aed;">
+            <div>
+                <div class="vip-title" style="color: #a78bfa;">VIP+</div>
+                <div class="vip-price">100 TL <span style="font-size:14px; color:#cbd5e1;">/ Aylık</span></div>
+                <ul class="vip-features">
+                    <li>[VIP+] Özel Prefiksi</li>
+                    <li>VIP Özelliklerinin Tamamı</li>
+                    <li>/fly (Uçma) Aktifliği</li>
+                    <li>Sanal Sandık (/chest)</li>
+                </ul>
+            </div>
+            <button class="buy-btn" style="background:#7c3aed; color:white;" onclick="buyVIP('VIP+')">Satın Al</button>
+        </div>
+        <div class="market-card" style="border-color: gold;">
+            <div>
+                <div class="vip-title">MONARCH VIP</div>
+                <div class="vip-price">200 TL <span style="font-size:14px; color:#cbd5e1;">/ Aylık</span></div>
+                <ul class="vip-features">
+                    <li>👑 [Monarch] Kurucu Tagı</li>
+                    <li>Tüm VIP ve VIP+ Yetkileri</li>
+                    <li>Özel Set ve Alet Kiti</li>
+                    <li>Sunucu Doluyken Giriş</li>
+                </ul>
+            </div>
+            <button class="buy-btn" onclick="buyVIP('MONARCH VIP')">Satın Al</button>
+        </div>
+    </div>
+</section>
 
-<div id="authModal" class="modal-overlay">
+<div id="authModal"
+  class="modal-overlay">
     <div class="modal-box">
         <span class="close-btn" onclick="toggleModal()">&times;</span>
         
@@ -333,6 +392,7 @@ function checkLogin() {
     const loggedInUser = localStorage.getItem("loggedInUser");
     const navAuth = document.getElementById("navAuth");
     const mainAuthBtn = document.getElementById("mainAuthBtn");
+    const marketSection = document.getElementById("marketSection");
 
     if (loggedInUser) {
         navAuth.innerHTML = `
@@ -340,6 +400,7 @@ function checkLogin() {
             <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
         `;
         mainAuthBtn.innerHTML = `<span style="color:gold; font-size:20px; font-weight:bold;">Siteye Giriş Yapıldı. Keyifli Vakit Geçiriniz!</span>`;
+        marketSection.style.display = "block";
     } else {
         navAuth.innerHTML = `
             <button onclick="toggleModal('login')" class="btn" style="padding:8px 15px; font-size:14px; background:transparent; border:1px solid #7c3aed;">🔑 Giriş Yap</button>
@@ -349,7 +410,13 @@ function checkLogin() {
             <button onclick="toggleModal('login')" class="btn">🔑 Giriş Yap</button>
             <button onclick="toggleModal('register')" class="btn btn-secondary">📝 Kayıt Ol</button>
         `;
+        marketSection.style.display = "none";
     }
+}
+
+function buyVIP(packName) {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    alert(`Sevgili ${loggedInUser}, ${packName} paketini seçtin! Satın alım talebi oluşturulması için lütfen Discord üzerinden yetkililerle iletişime geç.`);
 }
 
 function loginProcess() {
