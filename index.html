@@ -219,6 +219,23 @@ text-decoration: underline;
 margin: 15px 0;
 font-size: 14px;
 }
+
+.status-badge {
+display: inline-block;
+padding: 4px 12px;
+border-radius: 20px;
+font-size: 13px;
+font-weight: bold;
+margin-bottom: 8px;
+}
+.status-online {
+background: #10b981;
+color: white;
+}
+.status-offline {
+background: #ef4444;
+color: white;
+}
 </style>
 </head>
 
@@ -241,8 +258,12 @@ font-size: 14px;
  
 <section class="cards">
 <div class="card" id="ip">
-<h2>🎮 Sunucu IP</h2>
-<p>MonarchNetwork.aternos.me</p>
+<h2>🎮 Sunucu IP & Durum</h2>
+<p style="margin-bottom: 10px;">MonarchNetwork.aternos.me</p>
+<div id="serverStatusBox">
+<span id="statusBadge" class="status-badge status-offline">Kontrol ediliyor...</span>
+<p id="playerCount" style="font-size: 14px; color: #cbd5e1;">Oyuncu: -/-</p>
+</div>
 </div>
 
 <div class="card" id="discord">
@@ -318,7 +339,6 @@ function checkLogin() {
             <span class="welcome-txt">👋 Hoş geldin, ${loggedInUser}!</span>
             <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
         `;
-        // İstediğin gibi "Siteye Giriş Yapıldı" olarak güncellendi kral
         mainAuthBtn.innerHTML = `<span style="color:gold; font-size:20px; font-weight:bold;">Siteye Giriş Yapıldı. Keyifli Vakit Geçiriniz!</span>`;
     } else {
         navAuth.innerHTML = `
@@ -395,7 +415,34 @@ function logout() {
     checkLogin();
 }
 
-window.onload = checkLogin;
+async function checkServerStatus() {
+    const badge = document.getElementById("statusBadge");
+    const count = document.getElementById("playerCount");
+    try {
+        const res = await fetch("https://mcsrvstat.us");
+        const data = await res.json();
+        
+        if (data.online) {
+            badge.className = "status-badge status-online";
+            badge.textContent = "AÇIK";
+            count.textContent = `Oyuncu: ${data.players.online} / ${data.players.max}`;
+        } else {
+            badge.className = "status-badge status-offline";
+            badge.textContent = "KAPALI";
+            count.textContent = "Oyuncu: 0 / 0";
+        }
+    } catch (e) {
+        badge.className = "status-badge status-offline";
+        badge.textContent = "KAPALI";
+        count.textContent = "Oyuncu: -/-";
+    }
+}
+
+window.onload = function() {
+    checkLogin();
+    checkServerStatus();
+    setInterval(checkServerStatus, 30000); // Her 30 saniyede bir durumu günceller
+};
 </script>
 
 </body>
