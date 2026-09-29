@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monarch Network - Mağaza</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 10%;
+background:#111827;
+}
+
+.logo {
+color:gold;
+font-size:28px;
+font-weight:bold;
+text-decoration: none;
+}
+
+.nav-user {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+
+.welcome-txt {
+color: gold;
+font-weight: bold;
+}
+
+.btn{
+padding:12px 25px;
+background:#3b82f6;
+border:none;
+border-radius:10px;
+color:white;
+cursor:pointer;
+font-size:16px;
+text-decoration: none;
+display: inline-block;
+font-weight: bold;
+}
+
+.btn:hover{
+background:#2563eb;
+}
+
+.market-header {
+text-align: center;
+padding: 60px 20px 20px 20px;
+}
+
+.market-header h1 {
+font-size: 45px;
+color: gold;
+margin-bottom: 10px;
+}
+
+.market-header p {
+font-size: 18px;
+color: #cbd5e1;
+}
+
+.market-cards {
+display: flex;
+justify-content: center;
+gap: 30px;
+flex-wrap: wrap;
+max-width: 1200px;
+margin: 40px auto;
+padding: 0 20px;
+}
+
+.market-card {
+background: #1e293b;
+border: 2px solid #334155;
+border-radius: 20px;
+width: 300px;
+padding: 30px;
+text-align: center;
+transition: transform 0.3s ease, border-color 0.3s ease;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+}
+
+.market-card:hover {
+transform: translateY(-10px);
+border-color: gold;
+}
+
+.vip-title {
+font-size: 26px;
+color: gold;
+font-weight: bold;
+margin-bottom: 15px;
+}
+
+.vip-price {
+font-size: 32px;
+font-weight: bold;
+color: #10b981;
+margin-bottom: 20px;
+}
+
+.vip-features {
+list-style: none;
+text-align: left;
+margin-bottom: 30px;
+color: #cbd5e1;
+font-size: 15px;
+}
+
+.vip-features li {
+margin: 10px 0;
+position: relative;
+padding-left: 20px;
+}
+
+.vip-features li::before {
+content: "✔";
+position: absolute;
+left: 0;
+color: #10b981;
+font-weight: bold;
+}
+
+.buy-btn {
+background: gold;
+color: #0f172a;
+padding: 12px 20px;
+border: none;
+border-radius: 10px;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+transition: background 0.2s;
+}
+
+.buy-btn:hover {
+background: #e6c200;
+}
+
+footer{
+text-align:center;
+padding:20px;
+background:#111827;
+margin-top:60px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<a href="index.html" class="logo">👑 MONARCH NETWORK</a>
+<div id="navAuth" class="nav-user"></div>
+</nav>
+
+<div class="market-header">
+    <h1>👑 Sunucu Mağazası</h1>
+    <p>VIP paketlerinden dilediğini seçerek sunucumuzun gelişimine destek olabilirsin!</p>
+    <br>
+    <a href="index.html" class="btn">← Ana Sayfaya Dön</a>
+</div>
+ 
+<section class="market-cards">
+    <!-- VIP Kartı -->
+    <div class="market-card">
+        <div>
+            <div class="vip-title">VIP</div>
+            <div class="vip-price">50 TL <span style="font-size:14px; color:#cbd5e1;">/ Aylık</span></div>
+            <ul class="vip-features">
+                <li>[VIP] Özel Prefiksi</li>
+                <li>Sıra Beklemeden Giriş Hakkı</li>
+                <li>/feed (Açlık Doldurma) Komutu</li>
+                <li>Özel Yeşil Sohbet Rengi</li>
+            </ul>
+        </div>
+        <button class="buy-btn" onclick="buyProcess('VIP')">Satın Al</button>
+    </div>
+
+    <!-- VIP+ Kartı -->
+    <div class="market-card" style="border-color: #7c3aed;">
+        <div>
+            <div class="vip-title" style="color: #a78bfa;">VIP+</div>
+            <div class="vip-price">100 TL <span style="font-size:14px; color:#cbd5e1;">/ Aylık</span></div>
+            <ul class="vip-features">
+                <li>[VIP+] Özel Prefiksi</li>
+                <li>VIP Özelliklerinin Tamamı</li>
+                <li>/fly (Uçma) Aktifliği</li>
+                <li>Sanal Sandık (/chest)</li>
+                <li>Rastgele Işınlanma (/rtp)</li>
+            </ul>
+        </div>
+        <button class="buy-btn" style="background:#7c3aed; color:white;" onclick="buyProcess('VIP+')">Satın Al</button>
+    </div>
+
+    <!-- MONARCH VIP Kartı -->
+    <div class="market-card" style="border-color: gold;">
+        <div>
+            <div class="vip-title">MONARCH VIP</div>
+            <div class="vip-price">200 TL <span style="font-size:14px; color:#cbd5e1;">/ Aylık</span></div>
+            <ul class="vip-features">
+                <li>👑 [Monarch] Kurucu Özel Tagı</li>
+                <li>Tüm VIP ve VIP+ Yetkileri</li>
+                <li>Yaratıcı Modda GM1 Blok Koyma</li>
+                <li>Özel Set ve Alet Kiti (/kit)</li>
+                <li>Sunucu Doluyken Bile Giriş</li>
+            </ul>
+        </div>
+        <button class="buy-btn" onclick="buyProcess('MONARCH VIP')">Satın Al</button>
+    </div>
+</section>
+
+<footer>
+© Monarch Network
+</footer>
+
+<script>
+// Kullanıcının ana sayfada giriş yapıp yapmadığını kontrol eder
+function checkLoginStatus() {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    const navAuth = document.getElementById("navAuth");
+
+    if (loggedInUser) {
+        navAuth.innerHTML = `<span class="welcome-txt">👋 ${loggedInUser}</span>`;
+    } else {
+        navAuth.innerHTML = `<span style="color:#ef4444; font-size:14px; font-weight:bold;">⚠️ Giriş Yapılmadı</span>`;
+    }
+}
+
+// Satın alma işlemi kontrolü
+function buyProcess(packName) {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    
+    if (!loggedInUser) {
+        alert("Bu paketi satın alabilmek için önce ana sayfadan giriş yapmalı veya kayıt olmalısınız!");
+    } else {
+        alert(`Sevgili ${loggedInUser}, ${packName} paketini seçtin! İşlemleri tamamlamak için lütfen Discord üzerinden yetkililerle iletişime geç.`);
+    }
+}
+
+// Sayfa yüklendiğinde durum kontrolü yap
+window.onload = checkLoginStatus;
+</script>
+
+</body>
+</html>
