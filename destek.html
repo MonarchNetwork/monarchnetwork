@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monarch Network - Destek Sistemi</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 10%;
+background:#111827;
+}
+
+.logo {
+color:gold;
+font-size:28px;
+font-weight:bold;
+text-decoration: none;
+}
+
+.nav-user {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+
+.welcome-txt {
+color: gold;
+font-weight: bold;
+}
+
+.btn{
+padding:12px 25px;
+background:#3b82f6;
+border:none;
+border-radius:10px;
+color:white;
+cursor:pointer;
+font-size:16px;
+text-decoration: none;
+display: inline-block;
+font-weight: bold;
+}
+
+.btn:hover{
+background:#2563eb;
+}
+
+.support-container {
+max-width: 600px;
+margin: 50px auto;
+background: #1e293b;
+padding: 40px;
+border-radius: 20px;
+border: 2px solid #334155;
+box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.support-container h1 {
+color: gold;
+font-size: 32px;
+margin-bottom: 10px;
+text-align: center;
+}
+
+.support-container p {
+color: #cbd5e1;
+font-size: 15px;
+margin-bottom: 30px;
+text-align: center;
+}
+
+.form-group {
+margin-bottom: 20px;
+}
+
+.form-group label {
+display: block;
+color: gold;
+font-weight: bold;
+margin-bottom: 8px;
+font-size: 14px;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+width: 100%;
+padding: 12px;
+border: none;
+border-radius: 8px;
+background: #334155;
+color: white;
+outline: none;
+font-size: 15px;
+}
+
+.form-group input::placeholder, .form-group textarea::placeholder {
+color: #94a3b8;
+}
+
+.form-group textarea {
+resize: vertical;
+min-height: 120px;
+}
+
+.submit-btn {
+width: 100%;
+padding: 14px;
+background: #7c3aed;
+border: none;
+border-radius: 8px;
+color: white;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+transition: background 0.2s;
+margin-top: 10px;
+}
+
+.submit-btn:hover {
+background: #6d28d9;
+}
+
+footer{
+text-align:center;
+padding:20px;
+background:#111827;
+margin-top:60px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<a href="index.html" class="logo">👑 MONARCH NETWORK</a>
+<div id="navAuth" class="nav-user"></div>
+</nav>
+
+<div class="support-container">
+    <h1>🛠️ Destek Talebi Oluştur</h1>
+    <p>Yaşadığın sorunu detaylıca anlat, yetkililerimiz en kısa sürede incelesin!</p>
+    
+    <form id="supportForm" onsubmit="sendTicket(event)">
+        <div class="form-group">
+            <label for="ticketCategory">📌 Talep Kategorisi</label>
+            <select id="ticketCategory" required>
+                <option value="" disabled selected>Bir kategori seçin...</option>
+                <option value="Oyuncu Şikayeti">⚔️ Oyuncu Şikayeti / Rapor</option>
+                <option value="Hata Bildirimi (Bug)">🐛 Hata Bildirimi (Bug)</option>
+                <option value="Ödeme / Mağaza Sorunu">💎 Ödeme / Mağaza Sorunu</option>
+                <option value="Hesap / Şifre Sorunları">🔑 Hesap / Şifre Sorunları</option>
+                <option value="Öneri / İstek">💡 Öneri / İstek</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="ticketSubject">📝 Konu Başlığı</label>
+            <input type="text" id="ticketSubject" placeholder="Örn: Hile bildirimi, VIP yetkim gelmedi" required>
+        </div>
+
+        <div class="form-group">
+            <label for="ticketMessage">💬 Mesajınız</label>
+            <textarea id="ticketMessage" placeholder="Sorununuzu, tarihlerini veya şikayetçi olduğunuz oyuncu adını buraya detaylıca yazın..." required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Talebi Gönder</button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 25px;">
+        <a href="index.html" style="color: gold; text-decoration: none; font-weight: bold; font-size: 14px;">← Ana Sayfaya Dön</a>
+    </div>
+</div>
+
+<footer>
+© Monarch Network
+</footer>
+
+<script>
+// Giriş kontrolü (Kullanıcı adını nav kısmına yazar)
+function checkLoginStatus() {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    const navAuth = document.getElementById("navAuth");
+
+    if (loggedInUser) {
+        navAuth.innerHTML = `<span class="welcome-txt">👋 ${loggedInUser}</span>`;
+    } else {
+        navAuth.innerHTML = `<span style="color:#ef4444; font-size:14px; font-weight:bold;">⚠️ Giriş Yapılmadı</span>`;
+    }
+}
+
+// Bilet gönderme fonksiyonu
+function sendTicket(event) {
+    event.preventDefault(); // Sayfanın yenilenmesini engeller
+    
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    
+    // Eğer siteye giriş yapmadıysa bilet gönderemez!
+    if (!loggedInUser) {
+        alert("Destek talebi oluşturabilmek için önce ana sayfadan giriş yapmalı veya kayıt olmalısınız!");
+        return;
+    }
+
+    const category = document.getElementById("ticketCategory").value;
+    const subject = document.getElementById("ticketSubject").value.trim();
+    const message = document.getElementById("ticketMessage").value.trim();
+
+    // Talebin başarıyla alındığını simüle eden efsane uyarı mesajı
+    alert(`Teşekkürler ${loggedInUser}!\n\n[${category}] başlıklı destek talebiniz başarıyla oluşturuldu. Yetkililerimiz konuyu inceleyip en kısa sürede size geri dönüş yapacaktır.`);
+    
+    // Formu temizle
+    document.getElementById("supportForm").reset();
+}
+
+window.onload = checkLoginStatus;
+</script>
+
+</body>
+</html>
