@@ -61,7 +61,7 @@ body{
     font-weight: 600;
     color: gold;
     margin-bottom: 10px;
-    line-height: 1.4;
+    line-height: 1.5;
 }
 .form-group input, .form-group textarea, .form-group select {
     width: 100%;
@@ -77,11 +77,11 @@ body{
     border-color: gold;
 }
 .form-group textarea {
-    height: 100px;
+    height: 110px;
     resize: none;
 }
 
-/* Sayı alanındaki okları gizlemek için minik CSS */
+/* Sayı alanındaki okları gizlemek için CSS */
 .form-group input[type=number]::-webkit-inner-spin-button, 
 .form-group input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none; 
@@ -169,7 +169,6 @@ body{
                     <textarea class="test-input" placeholder="Cevabınız"></textarea>
                 </div>
 
-                <!-- GÜNCELLENEN 9. SORU (SENARYO) -->
                 <div class="form-group">
                     <label>9. Senaryo: Rehber olarak görev yapıyorsun, 2 arkadaşın birbiri ile ağır bir şekilde küfürleştiğini gördünüz ikisi de arkadaş olduklarını kabul ediyorlar ve birbirlerinden şikayetçi değiller ama sunucuda herkesin görebileceği şekilde ağır küfürler kullandılar bu durumda ne yaparsın?</label>
                     <textarea class="test-input" placeholder="Bu senaryodaki cevabınız ve uygulayacağınız yaptırım nedir?"></textarea>
@@ -194,9 +193,10 @@ body{
                     <textarea class="test-input" placeholder="Cevabınız"></textarea>
                 </div>
 
+                <!-- GÜNCELLENEN 13. SORU (YENİ REHBER SENARYOSU) -->
                 <div class="form-group">
-                    <label>13. Temel Minecraft yetkili komutlarına ne kadar hakimsiniz? (1-10 arası puan verin)</label>
-                    <input type="number" class="test-input" min="1" max="10" placeholder="Örn: 9">
+                    <label>13. Senaryo: Bir rehberin görevini kötüye kullandığını fark ettin. 'A' ve 'B' kişileri oyun sohbeti üzerinden birbirlerine hakaret ederken, rehber sadece 'A' kişisine susturma (mute) cezası uyguluyor. 'B' kişisi rehberin arkadaşı olduğu için ona hiçbir yaptırım uygulamıyor. Bu durumda ne yaparsın?</label>
+                    <textarea class="test-input" placeholder="Bu senaryodaki cevabınız ve izleyeceğiniz yol nedir?"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -204,7 +204,6 @@ body{
                     <textarea class="test-input" placeholder="Cevabınız"></textarea>
                 </div>
 
-                <!-- GÜNCELLENEN 15. SORU (TELEFON NUMARASI - SADECE SAYI) -->
                 <div class="form-group">
                     <label>15. Telefon numaranız nedir?</label>
                     <input type="number" class="test-input" placeholder="Örn: 05551234567 (Sadece sayı girilebilir)">
@@ -246,7 +245,7 @@ function finishForm() {
     let apps = JSON.parse(localStorage.getItem("site_apps")) || [];
     apps.push({ 
         user: loggedInUser, 
-        nameAge: inputs[0].value + " / " + inputs[1].value, // Ad ve Yaş alanları
+        nameAge: inputs[0].value + " / " + inputs[1].value, // 1. ve 2. sorudan ad/yaş alıyor
         role: "Asistan Temalı Rehber Formu", 
         exp: fullResult 
     });
