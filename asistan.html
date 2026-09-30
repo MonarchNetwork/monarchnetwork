@@ -61,6 +61,7 @@ body{
     font-weight: 600;
     color: gold;
     margin-bottom: 10px;
+    line-height: 1.4;
 }
 .form-group input, .form-group textarea, .form-group select {
     width: 100%;
@@ -76,8 +77,18 @@ body{
     border-color: gold;
 }
 .form-group textarea {
-    height: 80px;
+    height: 100px;
     resize: none;
+}
+
+/* Sayı alanındaki okları gizlemek için minik CSS */
+.form-group input[type=number]::-webkit-inner-spin-button, 
+.form-group input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+.form-group input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .submit-btn {
@@ -158,9 +169,10 @@ body{
                     <textarea class="test-input" placeholder="Cevabınız"></textarea>
                 </div>
 
+                <!-- GÜNCELLENEN 9. SORU (SENARYO) -->
                 <div class="form-group">
-                    <label>9. Bir oyuncu sunucu içinde başka sunucunun reklamını yaparsa ne yaparsınız?</label>
-                    <input type="text" class="test-input" placeholder="Cevabınız">
+                    <label>9. Senaryo: Rehber olarak görev yapıyorsun, 2 arkadaşın birbiri ile ağır bir şekilde küfürleştiğini gördünüz ikisi de arkadaş olduklarını kabul ediyorlar ve birbirlerinden şikayetçi değiller ama sunucuda herkesin görebileceği şekilde ağır küfürler kullandılar bu durumda ne yaparsın?</label>
+                    <textarea class="test-input" placeholder="Bu senaryodaki cevabınız ve uygulayacağınız yaptırım nedir?"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -192,12 +204,10 @@ body{
                     <textarea class="test-input" placeholder="Cevabınız"></textarea>
                 </div>
 
+                <!-- GÜNCELLENEN 15. SORU (TELEFON NUMARASI - SADECE SAYI) -->
                 <div class="form-group">
-                    <label>15. Kurallara adil bir şekilde uyacağına söz veriyor musun?</label>
-                    <select class="test-input">
-                        <option value="Söz veriyorum, adil olacağım.">Söz veriyorum, adil olacağım.</option>
-                        <option value="Söz veremem.">Söz veremem.</option>
-                    </select>
+                    <label>15. Telefon numaranız nedir?</label>
+                    <input type="number" class="test-input" placeholder="Örn: 05551234567 (Sadece sayı girilebilir)">
                 </div>
 
                 <button class="submit-btn" onclick="finishForm()">Başvuruyu Tamamla ve Asistana Teslim Et</button>
@@ -236,7 +246,7 @@ function finishForm() {
     let apps = JSON.parse(localStorage.getItem("site_apps")) || [];
     apps.push({ 
         user: loggedInUser, 
-        nameAge: inputs[0].value + " / " + inputs[1].value, 
+        nameAge: inputs[0].value + " / " + inputs[1].value, // Ad ve Yaş alanları
         role: "Asistan Temalı Rehber Formu", 
         exp: fullResult 
     });
