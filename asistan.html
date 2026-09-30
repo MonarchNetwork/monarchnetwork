@@ -3,85 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monarch Network - Yapay Zeka Asistanı</title>
+<title>Monarch Network - Mülakat Asistanı</title>
 <style>
-*{
-    margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif;
-}
-body{
-    background:#0f172a; color:white; padding: 40px 20px;
-    display: flex; flex-direction: column; align-items: center; min-height: 100vh;
-}
-.container {
-    width: 100%; max-width: 700px;
-}
-.back-link {
-    display: inline-block; color: #cbd5e1; text-decoration: none; font-size: 14px; margin-bottom: 20px;
-}
+*{ margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+body{ background:#0f172a; color:white; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+.container { width: 100%; max-width: 700px; }
+.back-link { display: inline-block; color: #cbd5e1; text-decoration: none; font-size: 14px; margin-bottom: 20px; }
 .back-link:hover { color: gold; }
-
-.chat-box {
-    background: #1e293b; border-radius: 20px; border: 1px solid #334155;
-    height: 500px; display: flex; flex-direction: column; overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-}
-.chat-header {
-    background: #111827; padding: 20px; text-align: center; border-bottom: 1px solid #334155;
-}
+.chat-box { background: #1e293b; border-radius: 20px; border: 1px solid #334155; height: 550px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+.chat-header { background: #111827; padding: 20px; text-align: center; border-bottom: 1px solid #334155; }
 .chat-header h2 { color: gold; font-size: 20px; }
 .chat-header p { color: #94a3b8; font-size: 13px; margin-top: 4px; }
-
-.chat-messages {
-    flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;
-}
+.chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
 .msg { max-width: 80%; padding: 12px 16px; border-radius: 15px; font-size: 14px; line-height: 1.5; }
 .msg.bot { background: #334155; color: white; align-self: flex-start; border-top-left-radius: 5px; }
 .msg.user { background: #7c3aed; color: white; align-self: flex-end; border-top-right-radius: 5px; }
-
-.chat-footer {
-    padding: 15px; background: #111827; display: flex; gap: 10px; border-top: 1px solid #334155;
-}
-.chat-footer input {
-    flex: 1; padding: 12px; border: none; border-radius: 8px; background: #334155; color: white; outline: none;
-}
-.chat-footer button {
-    padding: 0 20px; background: #7c3aed; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer;
-}
-.chat-footer button:hover { background: #6d28d9; }
+.chat-footer { padding: 15px; background: #111827; display: flex; gap: 10px; border-top: 1px solid #334155; }
+.chat-footer input { flex: 1; padding: 12px; border: none; border-radius: 8px; background: #334155; color: white; outline: none; }
+.chat-footer button { padding: 0 20px; background: #10b981; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; }
+.chat-footer button:hover { background: #059669; }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <a href="index.html" class="back-link">← Ana Sayfaya Dön</a>
+    <a href="yetkilibasvuru.html" class="back-link">← Başvuru Listesine Dön</a>
     
     <div class="chat-box">
         <div class="chat-header">
-            <h2>👑 Monarch Destek Asistanı</h2>
-            <p>Sunucu hakkında merak ettiğin her şeyi sorabilirsin!</p>
+            <h2>🤖 Monarch Mülakat Asistanı</h2>
+            <p>Rehberlik başvurunuz için otomatik sohbet mülakatı</p>
         </div>
         
         <div class="chat-messages" id="chatMessages">
-            <div class="msg bot">Merhaba kral! Ben Monarch Asistanı. Sunucu IP adresi, yetkili başvuruları, market veya oyun modları hakkında sana nasıl yardımcı olabilirim?</div>
+            <div class="msg bot">Selam kral! Monarch Network Rehberlik başvurusu asistanına hoş geldin. Başvurunu işleme alabilmem için öncelikle <b>Adını ve Yaşını</b> yazar mısın?</div>
         </div>
         
         <div class="chat-footer">
-            <input type="text" id="userInput" placeholder="Mesajınızı yazın..." onkeypress="handleKeyPress(event)">
+            <input type="text" id="userInput" placeholder="Cevabınızı yazıp Enter'a basın..." onkeypress="handleKeyPress(event)">
             <button onclick="sendMessage()">Gönder</button>
         </div>
     </div>
 </div>
 
 <script>
-// Basit Yapay Zeka Cevap Simülasyonu
-const botResponses = {
-    "ip": "Monarch Network sunucu adresimiz: <b>MonarchNetwork.aternos.me</b> kral! Siteden kopyalayıp oyuna giriş yapabilirsin.",
-    "durum": "Sunucumuz şu anda aktiflik durumuna göre güncelleniyor. Ana sayfadaki göstergeden anlık oyuncu sayısına bakabilirsin.",
-    "başvuru": "Yetkili kadromuza katılmak istiyorsan, ana sayfadaki 'Yetkili Başvurusu' bölümünden açık formları doldurabilirsin!",
-    "market": "VIP paketleri, kasa anahtarları ve özel kozmetikler çok yakında market sayfamızda aktif olacak kral, takipte kal!",
-    "smp": "SMP ve Survival modlarımız aktiftir! Yakında efsane etkinlikler ve Box PvP modu da sunucumuza eklenecek.",
-    "selam": "Aleykümselam kral, hoş geldin! Sunucuyla ilgili neyi merak ediyorsun?"
-};
+const questions = [
+    "Harika! Peki oyun içi (Minecraft) kullanıcı adın (IGN) nedir kral?",
+    "Süper. Peki sunucuda günlük ortalama kaç saat aktif kalabilirsin?",
+    "Anladım. Daha önce hiç başka Minecraft sunucularında rehberlik yaptın mı? Deneyimlerinden bahseder misin?",
+    "Son olarak: Seni neden Monarch Network ekibine seçmeliyiz? Farkın nedir?",
+    "Mülakat bitti kral! Başvurunu onaylamak için lütfen ekrana <b>'tamamla'</b> yazıp gönder."
+];
+
+let currentStep = 0;
+let userAnswers = {};
 
 function handleKeyPress(e) {
     if (e.key === 'Enter') sendMessage();
@@ -93,29 +68,37 @@ function sendMessage() {
     if (!text) return;
 
     const chatMessages = document.getElementById("chatMessages");
-
-    // Kullanıcı Mesajı Ekle
     chatMessages.innerHTML += `<div class="msg user">${text}</div>`;
     input.value = "";
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    // Asistan Cevap Süreci
+    userAnswers[`soru_${currentStep}`] = text;
+
     setTimeout(() => {
-        let reply = "Kral sorduğun soruyu tam anlayamadım ama IP adresi, market, modlar veya başvuru dersen hemen yardımcı olabilirim!";
-        const lowerText = text.toLowerCase();
+        if (currentStep < questions.length) {
+            chatMessages.innerHTML += `<div class="msg bot">${questions[currentStep]}</div>`;
+            currentStep++;
+        } else {
+            const loggedInUser = localStorage.getItem("loggedInUser") || "Ziyaretçi";
+            
+            let apps = JSON.parse(localStorage.getItem("site_apps")) || [];
+            apps.push({ 
+                user: loggedInUser, 
+                nameAge: userAnswers["soru_0"] || "Belirtilmedi", 
+                role: "Asistan (Rehber) Başvurusu", 
+                exp: `Oyun Adı: ${userAnswers["soru_1"]} | Aktiflik: ${userAnswers["soru_2"]} | Deneyim: ${userAnswers["soru_3"]} | Neden Biz: ${userAnswers["soru_4"]}`
+            });
+            localStorage.setItem("site_apps", JSON.stringify(apps));
 
-        for (let key in botResponses) {
-            if (lowerText.includes(key)) {
-                reply = botResponses[key];
-                break;
-            }
+            chatMessages.innerHTML += `<div class="msg bot">🎉 Başvurunuz başarıyla kaydedildi! Sizi ana sayfaya geri götürüyorum...</div>`;
+            
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 2500);
         }
-
-        chatMessages.innerHTML += `<div class="msg bot">${reply}</div>`;
         chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 600);
+    }, 800);
 }
 </script>
-
 </body>
 </html>
