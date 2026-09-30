@@ -3,25 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monarch Network - Mülakat Asistanı</title>
+<title>Monarch Network - Başvuru Asistanı</title>
 <style>
-*{ margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
-body{ background:#0f172a; color:white; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-.container { width: 100%; max-width: 700px; }
-.back-link { display: inline-block; color: #cbd5e1; text-decoration: none; font-size: 14px; margin-bottom: 20px; }
+*{
+    margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif;
+}
+body{
+    background:#0f172a; color:white; padding: 40px 20px;
+    display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+}
+.container {
+    width: 100%; max-width: 750px;
+}
+.back-link {
+    display: inline-block; color: #cbd5e1; text-decoration: none; font-size: 14px; margin-bottom: 20px;
+}
 .back-link:hover { color: gold; }
-.chat-box { background: #1e293b; border-radius: 20px; border: 1px solid #334155; height: 550px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-.chat-header { background: #111827; padding: 20px; text-align: center; border-bottom: 1px solid #334155; }
+
+/* Asistan Kasa Tasarımı */
+.chat-box {
+    background: #1e293b; border-radius: 20px; border: 1px solid #334155;
+    display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+.chat-header {
+    background: #111827; padding: 20px; text-align: center; border-bottom: 1px solid #334155;
+}
 .chat-header h2 { color: gold; font-size: 20px; }
 .chat-header p { color: #94a3b8; font-size: 13px; margin-top: 4px; }
-.chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-.msg { max-width: 80%; padding: 12px 16px; border-radius: 15px; font-size: 14px; line-height: 1.5; }
-.msg.bot { background: #334155; color: white; align-self: flex-start; border-top-left-radius: 5px; }
-.msg.user { background: #7c3aed; color: white; align-self: flex-end; border-top-right-radius: 5px; }
-.chat-footer { padding: 15px; background: #111827; display: flex; gap: 10px; border-top: 1px solid #334155; }
-.chat-footer input { flex: 1; padding: 12px; border: none; border-radius: 8px; background: #334155; color: white; outline: none; }
-.chat-footer button { padding: 0 20px; background: #10b981; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; }
-.chat-footer button:hover { background: #059669; }
+
+/* Form İçerik Alanı */
+.chat-content {
+    padding: 30px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* Robot Karşılama Balonu */
+.bot-welcome {
+    background: #334155; color: white; padding: 15px 20px; 
+    border-radius: 15px; border-top-left-radius: 5px;
+    font-size: 14px; line-height: 1.6; margin-bottom: 30px;
+    border-left: 4px solid gold;
+}
+
+/* Form Giriş Elemanları (ChickenNW Şık Tasarımı) */
+.form-group {
+    margin-bottom: 25px;
+    background: #111827;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+}
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: gold;
+    margin-bottom: 10px;
+}
+.form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    outline: none;
+    background: #1e293b;
+    color: white;
+    font-size: 14px;
+}
+.form-group input:focus, .form-group textarea:focus {
+    border-color: gold;
+}
+.form-group textarea {
+    height: 80px;
+    resize: none;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: #10b981;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+.submit-btn:hover {
+    background: #059669;
+}
 </style>
 </head>
 <body>
@@ -30,75 +104,148 @@ body{ background:#0f172a; color:white; padding: 40px 20px; display: flex; flex-d
     <a href="yetkilibasvuru.html" class="back-link">← Başvuru Listesine Dön</a>
     
     <div class="chat-box">
+        <!-- Asistan Başlığı -->
         <div class="chat-header">
-            <h2>🤖 Monarch Mülakat Asistanı</h2>
-            <p>Rehberlik başvurunuz için otomatik sohbet mülakatı</p>
+            <h2>🤖 Monarch Başvuru Asistanı</h2>
+            <p>Rehberlik başvurunuzu asistan paneli üzerinden tamamlayın</p>
         </div>
         
-        <div class="chat-messages" id="chatMessages">
-            <div class="msg bot">Selam kral! Monarch Network Rehberlik başvurusu asistanına hoş geldin. Başvurunu işleme alabilmem için öncelikle <b>Adını ve Yaşını</b> yazar mısın?</div>
-        </div>
-        
-        <div class="chat-footer">
-            <input type="text" id="userInput" placeholder="Cevabınızı yazıp Enter'a basın..." onkeypress="handleKeyPress(event)">
-            <button onclick="sendMessage()">Gönder</button>
+        <div class="chat-content">
+            <!-- Asistan Karşılama Mesajı -->
+            <div class="bot-welcome">
+                <b>Monarch Asistanı:</b> Selam kral! Rehberlik mülakat formuna hoş geldin. Aşağıdaki 15 soruyu sunucu kurallarına ve gereksinimlerine uygun şekilde eksiksiz doldurursan başvurunu anında Admin abilerime ileteceğim. Başarılar!
+            </div>
+
+            <!-- 15 Soruluk Form Test Alanı -->
+            <div id="applicationForm">
+                <div class="form-group">
+                    <label>1. Adınız ve Soyadınız nedir?</label>
+                    <input type="text" class="test-input" placeholder="Cevabınız">
+                </div>
+
+                <div class="form-group">
+                    <label>2. Yaşınız kaç?</label>
+                    <input type="number" class="test-input" placeholder="Cevabınız">
+                </div>
+
+                <div class="form-group">
+                    <label>3. Minecraft oyun içi kullanıcı adınız (IGN) nedir?</label>
+                    <input type="text" class="test-input" placeholder="Cevabınız">
+                </div>
+
+                <div class="form-group">
+                    <label>4. Discord kullanıcı adınız nedir?</label>
+                    <input type="text" class="test-input" placeholder="Cevabınız">
+                </div>
+
+                <div class="form-group">
+                    <label>5. Günlük ortalama kaç saat aktif olabilirsiniz?</label>
+                    <input type="text" class="test-input" placeholder="Örn: Hafta içi 3, Hafta sonu 6 saat">
+                </div>
+
+                <div class="form-group">
+                    <label>6. Daha önce başka Minecraft sunucularında Rehberlik yaptınız mı?</label>
+                    <textarea class="test-input" placeholder="Deneyimlerinizden kısaca bahsedin..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>7. Bir oyuncu sohbette küfür ederse uygulayacağınız işlem sırası nedir?</label>
+                    <textarea class="test-input" placeholder="Cevabınız"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>8. Sunucuda hile kullanan birini fark ederseniz ne yaparsınız?</label>
+                    <textarea class="test-input" placeholder="Cevabınız"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>9. Bir oyuncu sunucu içinde başka sunucunun reklamını yaparsa ne yaparsınız?</label>
+                    <input type="text" class="test-input" placeholder="Cevabınız">
+                </div>
+
+                <div class="form-group">
+                    <label>10. Mikrofonunuz var mı ve sesli toplantılara katılabilir misiniz?</label>
+                    <select class="test-input">
+                        <option value="Evet, sorunsuz katılabilirim.">Evet, sorunsuz katılabilirim.</option>
+                        <option value="Mikrofonum var ama konuşamam.">Mikrofonum var ama konuşamam.</option>
+                        <option value="Hayır, katılamam.">Hayır, katılamam.</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>11. Sunucuda büyük bir kavga çıktığında soğukkanlılığınızı nasıl korursunuz?</label>
+                    <textarea class="test-input" placeholder="Cevabınız"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>12. Bir üst yetkiliyle sorun yaşarsanız bunu nasıl çözersiniz?</label>
+                    <textarea class="test-input" placeholder="Cevabınız"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>13. Temel Minecraft yetkili komutlarına ne kadar hakimsiniz? (1-10 arası puan verin)</label>
+                    <input type="number" class="test-input" min="1" max="10" placeholder="Örn: 9">
+                </div>
+
+                <div class="form-group">
+                    <label>14. Seni diğer adaylardan ayıran en büyük özelliğin nedir?</label>
+                    <textarea class="test-input" placeholder="Cevabınız"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>15. Kurallara adil bir şekilde uyacağına söz veriyor musun?</label>
+                    <select class="test-input">
+                        <option value="Söz veriyorum, adil olacağım.">Söz veriyorum, adil olacağım.</option>
+                        <option value="Söz veremem.">Söz veremem.</option>
+                    </select>
+                </div>
+
+                <button class="submit-btn" onclick="finishForm()">Başvuruyu Tamamla ve Asistana Teslim Et</button>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-const questions = [
-    "Harika! Peki oyun içi (Minecraft) kullanıcı adın (IGN) nedir kral?",
-    "Süper. Peki sunucuda günlük ortalama kaç saat aktif kalabilirsin?",
-    "Anladım. Daha önce hiç başka Minecraft sunucularında rehberlik yaptın mı? Deneyimlerinden bahseder misin?",
-    "Son olarak: Seni neden Monarch Network ekibine seçmeliyiz? Farkın nedir?",
-    "Mülakat bitti kral! Başvurunu onaylamak için lütfen ekrana <b>'tamamla'</b> yazıp gönder."
-];
+function finishForm() {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    if(!loggedInUser) {
+        alert("Kral, formu gönderebilmek için önce ana sayfadan giriş yapmalısın!");
+        window.location.href = "index.html";
+        return;
+    }
 
-let currentStep = 0;
-let userAnswers = {};
+    const inputs = document.querySelectorAll(".test-input");
+    let allFilled = true;
+    let answers = [];
 
-function handleKeyPress(e) {
-    if (e.key === 'Enter') sendMessage();
-}
-
-function sendMessage() {
-    const input = document.getElementById("userInput");
-    const text = input.value.trim();
-    if (!text) return;
-
-    const chatMessages = document.getElementById("chatMessages");
-    chatMessages.innerHTML += `<div class="msg user">${text}</div>`;
-    input.value = "";
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    userAnswers[`soru_${currentStep}`] = text;
-
-    setTimeout(() => {
-        if (currentStep < questions.length) {
-            chatMessages.innerHTML += `<div class="msg bot">${questions[currentStep]}</div>`;
-            currentStep++;
-        } else {
-            const loggedInUser = localStorage.getItem("loggedInUser") || "Ziyaretçi";
-            
-            let apps = JSON.parse(localStorage.getItem("site_apps")) || [];
-            apps.push({ 
-                user: loggedInUser, 
-                nameAge: userAnswers["soru_0"] || "Belirtilmedi", 
-                role: "Asistan (Rehber) Başvurusu", 
-                exp: `Oyun Adı: ${userAnswers["soru_1"]} | Aktiflik: ${userAnswers["soru_2"]} | Deneyim: ${userAnswers["soru_3"]} | Neden Biz: ${userAnswers["soru_4"]}`
-            });
-            localStorage.setItem("site_apps", JSON.stringify(apps));
-
-            chatMessages.innerHTML += `<div class="msg bot">🎉 Başvurunuz başarıyla kaydedildi! Sizi ana sayfaya geri götürüyorum...</div>`;
-            
-            setTimeout(() => {
-                window.location.href = "index.html";
-            }, 2500);
+    inputs.forEach((input, index) => {
+        if(!input.value.trim()) {
+            allFilled = false;
         }
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 800);
+        answers.push(`Soru ${index+1}: ${input.value}`);
+    });
+
+    if(!allFilled) {
+        alert("Lütfen 15 sorunun hepsini doldur kral, asistan eksik form kabul etmiyor!");
+        return;
+    }
+
+    const fullResult = answers.join(" | ");
+
+    let apps = JSON.parse(localStorage.getItem("site_apps")) || [];
+    apps.push({ 
+        user: loggedInUser, 
+        nameAge: inputs[0].value + " / " + inputs[1].value, 
+        role: "Asistan Temalı Rehber Formu", 
+        exp: fullResult 
+    });
+    localStorage.setItem("site_apps", JSON.stringify(apps));
+
+    alert("Harika! 15 soruluk form asistan tarafından başarıyla alındı ve Admin paneline iletildi.");
+    window.location.href = "index.html";
 }
 </script>
+
 </body>
 </html>
