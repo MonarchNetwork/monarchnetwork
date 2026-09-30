@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monarch Network - Yetkili Başvurusu</title>
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+padding: 20px;
+}
+
+.form-box {
+background: #1e293b;
+padding: 40px;
+border-radius: 15px;
+width: 100%;
+max-width: 500px;
+box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+border: 1px solid #334155;
+}
+
+h2 {
+color: gold;
+margin-bottom: 10px;
+text-align: center;
+}
+
+p {
+color: #cbd5e1;
+font-size: 14px;
+text-align: center;
+margin-bottom: 25px;
+}
+
+label {
+display: block;
+margin-bottom: 5px;
+color: gold;
+font-size: 14px;
+font-weight: bold;
+}
+
+input, textarea, select {
+width: 100%;
+padding: 12px;
+margin-bottom: 20px;
+border: none;
+border-radius: 8px;
+background: #334155;
+color: white;
+outline: none;
+}
+
+textarea {
+height: 120px;
+resize: none;
+}
+
+.btn {
+width: 100%;
+padding: 14px;
+background: #10b981;
+border: none;
+border-radius: 8px;
+color: white;
+cursor: pointer;
+font-weight: bold;
+font-size: 16px;
+transition: background 0.2s;
+}
+
+.btn:hover {
+background: #059669;
+}
+
+.back-link {
+display: block;
+text-align: center;
+margin-top: 15px;
+color: #cbd5e1;
+text-decoration: none;
+font-size: 14px;
+}
+
+.back-link:hover {
+color: gold;
+text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>👑 Yetkili Başvuru Formu</h2>
+    <p>Monarch Network ekibine katılmak için lütfen formu eksiksiz doldurun.</p>
+    
+    <div id="formFields">
+        <label for="staffName">Adınız ve Yaşınız:</label>
+        <input type="text" id="staffName" placeholder="Örn: Ahmet, 17">
+
+        <label for="staffRole">Başvurduğunuz Yetki:</label>
+        <select id="staffRole">
+            <option value="Rehber">Rehber</option>
+            <option value="Moderatör">Moderatör</option>
+            <option value="Mimar (Builder)">Mimar (Builder)</option>
+            <option value="Reklamcı">Reklamcı</option>
+        </select>
+
+        <label for="staffExp">Deneyimleriniz ve Kendinizi Tanıtın:</label>
+        <textarea id="staffExp" placeholder="Daha önce hangi sunucularda yetkili oldunuz? Günde kaç saat aktif olabilirsiniz?"></textarea>
+
+        <button class="btn" onclick="sendStaffApp()">Başvuruyu Gönder</button>
+    </div>
+    
+    <a href="index.html" class="back-link">← Ana Sayfaya Dön</a>
+</div>
+
+<script>
+function sendStaffApp() {
+    // Giriş kontrolü yapıyoruz
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    if(!loggedInUser) {
+        alert("Başvuru yapabilmek için önce ana sayfadan giriş yapmalısınız!");
+        window.location.href = "index.html";
+        return;
+    }
+
+    const nameAge = document.getElementById("staffName").value.trim();
+    const role = document.getElementById("staffRole").value;
+    const exp = document.getElementById("staffExp").value.trim();
+
+    if(!nameAge || !exp) {
+        alert("Lütfen formdaki tüm alanları doldurun!");
+        return;
+    }
+
+    // Ortak LocalStorage havuzuna kaydediyoruz (Böylece index.html'deki admin panelinde görünecek)
+    let apps = JSON.parse(localStorage.getItem("site_apps")) || [];
+    apps.push({ user: loggedInUser, nameAge: nameAge, role: role, exp: exp });
+    localStorage.setItem("site_apps", JSON.stringify(apps));
+
+    alert("Başvurunuz başarıyla alındı kral! Seni ana sayfaya yönlendiriyorum.");
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
