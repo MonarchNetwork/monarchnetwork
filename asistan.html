@@ -34,9 +34,14 @@ body{
 
 /* Form İçerik Alanı */
 .chat-content {
-    padding: 30px;
-    max-height: 600px;
-    overflow-y: auto;
+    padding: 30px; max-height: 600px; overflow-y: auto;
+}
+
+/* EKLEDİĞİMİZ KRİTİK MİNİK DİPNOT */
+.info-dipnot {
+    background: #7f1d1d; border: 1px solid #ef4444; color: #fca5a5;
+    padding: 12px 15px; border-radius: 10px; font-size: 13px; font-weight: bold;
+    margin-bottom: 20px; text-align: center; line-height: 1.4;
 }
 
 /* Robot Karşılama Balonu */
@@ -47,66 +52,33 @@ body{
     border-left: 4px solid gold;
 }
 
-/* Form Giriş Elemanları (ChickenNW Şık Tasarımı) */
+/* Form Alanları */
 .form-group {
-    margin-bottom: 25px;
-    background: #111827;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid #334155;
+    margin-bottom: 25px; background: #111827; padding: 20px;
+    border-radius: 12px; border: 1px solid #334155;
 }
 .form-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: gold;
-    margin-bottom: 10px;
-    line-height: 1.5;
+    display: block; font-size: 14px; font-weight: 600; color: gold; margin-bottom: 10px; line-height: 1.5;
 }
 .form-group input, .form-group textarea, .form-group select {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    outline: none;
-    background: #1e293b;
-    color: white;
-    font-size: 14px;
+    width: 100%; padding: 12px 16px; border: 1px solid #334155;
+    border-radius: 8px; outline: none; background: #1e293b; color: white; font-size: 14px;
 }
-.form-group input:focus, .form-group textarea:focus {
-    border-color: gold;
-}
-.form-group textarea {
-    height: 110px;
-    resize: none;
-}
+.form-group input:focus, .form-group textarea:focus { border-color: gold; }
+.form-group textarea { height: 110px; resize: none; }
 
-/* Sayı alanındaki okları gizlemek için CSS */
 .form-group input[type=number]::-webkit-inner-spin-button, 
 .form-group input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+  -webkit-appearance: none; margin: 0; 
 }
-.form-group input[type=number] {
-  -moz-appearance: textfield;
-}
+.form-group input[type=number] { -moz-appearance: textfield; }
 
 .submit-btn {
-    width: 100%;
-    padding: 16px;
-    background: #10b981;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-top: 10px;
+    width: 100%; padding: 16px; background: #10b981; border: none;
+    border-radius: 10px; color: white; font-weight: bold; font-size: 16px;
+    cursor: pointer; transition: background 0.2s; margin-top: 10px;
 }
-.submit-btn:hover {
-    background: #059669;
-}
+.submit-btn:hover { background: #059669; }
 </style>
 </head>
 <body>
@@ -114,20 +86,22 @@ body{
 <div class="container">
     <a href="yetkilibasvuru.html" class="back-link">← Başvuru Listesine Dön</a>
     
+    <!-- MİNİK DİPNOT UYARISI -->
+    <div class="info-dipnot">
+        🔴 DİPNOT: Şu an bir altyapı bulunmuyor ve başvurular yetkililer tarafından görülemiyor. O yüzden henüz başvuru yapmayınız!
+    </div>
+
     <div class="chat-box">
-        <!-- Asistan Başlığı -->
         <div class="chat-header">
             <h2>🤖 Monarch Başvuru Asistanı</h2>
             <p>Rehberlik başvurunuzu asistan paneli üzerinden tamamlayın</p>
         </div>
         
         <div class="chat-content">
-            <!-- Asistan Karşılama Mesajı -->
             <div class="bot-welcome">
                 <b>Monarch Asistanı:</b> Selam kral! Rehberlik mülakat formuna hoş geldin. Aşağıdaki 15 soruyu sunucu kurallarına ve gereksinimlerine uygun şekilde eksiksiz doldurursan başvurunu anında Admin abilerime ileteceğim. Başarılar!
             </div>
 
-            <!-- 15 Soruluk Form Test Alanı -->
             <div id="applicationForm">
                 <div class="form-group">
                     <label>1. Adınız ve Soyadınız nedir?</label>
@@ -171,7 +145,7 @@ body{
 
                 <div class="form-group">
                     <label>9. Senaryo: Rehber olarak görev yapıyorsun, 2 arkadaşın birbiri ile ağır bir şekilde küfürleştiğini gördünüz ikisi de arkadaş olduklarını kabul ediyorlar ve birbirlerinden şikayetçi değiller ama sunucuda herkesin görebileceği şekilde ağır küfürler kullandılar bu durumda ne yaparsın?</label>
-                    <textarea class="test-input" placeholder="Bu senaryodaki cevabınız ve uygulayacağınız yaptırım nedir?"></textarea>
+                    <textarea class="test-input" placeholder="Bu senaryodaki cevabınız nedir?"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -193,10 +167,9 @@ body{
                     <textarea class="test-input" placeholder="Cevabınız"></textarea>
                 </div>
 
-                <!-- GÜNCELLENEN 13. SORU (YENİ REHBER SENARYOSU) -->
                 <div class="form-group">
                     <label>13. Senaryo: Bir rehberin görevini kötüye kullandığını fark ettin. 'A' ve 'B' kişileri oyun sohbeti üzerinden birbirlerine hakaret ederken, rehber sadece 'A' kişisine susturma (mute) cezası uyguluyor. 'B' kişisi rehberin arkadaşı olduğu için ona hiçbir yaptırım uygulamıyor. Bu durumda ne yaparsın?</label>
-                    <textarea class="test-input" placeholder="Bu senaryodaki cevabınız ve izleyeceğiniz yol nedir?"></textarea>
+                    <textarea class="test-input" placeholder="Bu senaryodaki cevabınız nedir?"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -206,10 +179,10 @@ body{
 
                 <div class="form-group">
                     <label>15. Telefon numaranız nedir?</label>
-                    <input type="number" class="test-input" placeholder="Örn: 05551234567 (Sadece sayı girilebilir)">
+                    <input type="number" class="test-input" placeholder="Örn: 05551234567">
                 </div>
 
-                <button class="submit-btn" onclick="finishForm()">Başvuruyu Tamamla ve Asistana Teslim Et</button>
+                <button class="submit-btn" onclick="finishForm()">Başvuruyu Tamamla</button>
             </div>
         </div>
     </div>
@@ -219,7 +192,7 @@ body{
 function finishForm() {
     const loggedInUser = localStorage.getItem("loggedInUser");
     if(!loggedInUser) {
-        alert("Kral, formu gönderebilmek için önce ana sayfadan giriş yapmalısın!");
+        alert("Kral, önce giriş yapmalısın!");
         window.location.href = "index.html";
         return;
     }
@@ -229,32 +202,27 @@ function finishForm() {
     let answers = [];
 
     inputs.forEach((input, index) => {
-        if(!input.value.trim()) {
-            allFilled = false;
-        }
+        if(!input.value.trim()) { allFilled = false; }
         answers.push(`Soru ${index+1}: ${input.value}`);
     });
 
     if(!allFilled) {
-        alert("Lütfen 15 sorunun hepsini doldur kral, asistan eksik form kabul etmiyor!");
+        alert("Lütfen 15 sorunun hepsini doldur kral!");
         return;
     }
-
-    const fullResult = answers.join(" | ");
 
     let apps = JSON.parse(localStorage.getItem("site_apps")) || [];
     apps.push({ 
         user: loggedInUser, 
-        nameAge: inputs[0].value + " / " + inputs[1].value, // 1. ve 2. sorudan ad/yaş alıyor
-        role: "Asistan Temalı Rehber Formu", 
-        exp: fullResult 
+        nameAge: "Rehber Adayı", 
+        role: "Asistan Rehber Formu", 
+        exp: answers.join(" | ") 
     });
     localStorage.setItem("site_apps", JSON.stringify(apps));
 
-    alert("Harika! 15 soruluk form asistan tarafından başarıyla alındı ve Admin paneline iletildi.");
+    alert("Başvuru kaydedildi kral!");
     window.location.href = "index.html";
 }
 </script>
-
 </body>
 </html>
