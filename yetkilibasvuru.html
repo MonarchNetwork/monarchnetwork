@@ -5,47 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Monarch Network - Yetkili Başvuruları</title>
 <style>
-*{ margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
-body{ background:#f8fafc; color:#1e293b; padding: 50px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-.container { width: 100%; max-width: 900px; }
-.header-section { margin-bottom: 40px; }
-.header-section h1 { font-size: 32px; color: #0f172a; font-weight: bold; margin-bottom: 8px; }
-.header-section p { color: #64748b; font-size: 16px; }
-.form-list { display: flex; flex-direction: column; gap: 16px; }
-.form-card { background: white; padding: 24px 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0; }
-.card-info { display: flex; flex-direction: column; gap: 6px; }
-.card-title { font-size: 18px; color: #0f172a; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-.card-meta { font-size: 14px; color: #94a3b8; }
-.apply-btn { color: #64748b; text-decoration: none; font-weight: bold; font-size: 15px; padding: 10px 16px; border-radius: 8px; transition: all 0.2s; }
-.apply-btn:hover { color: #0f172a; background: #f1f5f9; }
-.back-home { display: inline-block; margin-top: 30px; color: #64748b; text-decoration: none; font-weight: 600; font-size: 14px; }
-.back-home:hover { color: #0f172a; text-decoration: underline; }
+*{
+    margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif;
+}
+body{
+    background:#0f172a; /* Ana sayfa ile aynı havalı koyu arka plan */
+    color:white; padding: 50px 20px;
+    display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+}
+.container {
+    width: 100%; max-width: 900px;
+}
+.header-section {
+    margin-bottom: 30px;
+}
+.header-section h1 {
+    font-size: 32px; color: gold; font-weight: bold; margin-bottom: 8px;
+}
+.header-section p {
+    color: #cbd5e1; font-size: 16px;
+}
+
+/* EKLEDİĞİMİZ UYARI KUTUSU */
+.warning-box {
+    background: #7f1d1d; border: 1px solid #f87171; border-radius: 12px;
+    padding: 15px 20px; color: #fca5a5; font-size: 14px; font-weight: bold;
+    margin-bottom: 25px; line-height: 1.5;
+}
+
+.form-list {
+    display: flex; flex-direction: column; gap: 16px;
+}
+.form-card {
+    background: #1e293b; padding: 24px 30px; border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex;
+    justify-content: space-between; align-items: center; border: 1px solid #334155;
+}
+.card-info {
+    display: flex; flex-direction: column; gap: 6px;
+}
+.card-title {
+    font-size: 18px; color: gold; font-weight: 600; display: flex; align-items: center; gap: 10px;
+}
+.card-meta {
+    font-size: 14px; color: #94a3b8;
+}
+.apply-btn {
+    color: white; background: #7c3aed; text-decoration: none;
+    font-weight: bold; font-size: 15px; padding: 10px 20px; border-radius: 8px; transition: all 0.2s;
+}
+.apply-btn:hover {
+    background: #6d28d9;
+}
+.back-home {
+    display: inline-block; margin-top: 30px; color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 14px;
+}
+.back-home:hover {
+    color: gold; text-decoration: underline;
+}
 </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header-section">
-        <h1>Yetkili başvurusu</h1>
+        <h1>Yetkili Başvuruları</h1>
         <p>Ekibimize katılmak istiyorsan açık formlardan birini doldur.</p>
     </div>
 
+    <!-- NOT VE UYARI ALANI -->
+    <div class="warning-box">
+        ⚠️ NOT: Henüz diğer başvuru formları hazır değildir! Altyapı çalışmaları devam etmektedir.
+    </div>
+
     <div class="form-list">
-        <!-- REHBER BUTONU DİREKT ASİSTANA GİDER -->
+        <!-- Sadece Rehber Kaldı -->
         <div class="form-card">
             <div class="card-info">
                 <div class="card-title"><span>📋</span> Rehber Başvurusu</div>
                 <div class="card-meta">📂 Asistan Mülakatı (15 Soru)</div>
             </div>
             <a href="asistan.html" class="apply-btn">Başvur →</a>
-        </div>
-
-        <div class="form-card">
-            <div class="card-info">
-                <div class="card-title"><span>📝</span> Moderatör Başvuru Formu</div>
-                <div class="card-meta">📂 14 soru</div>
-            </div>
-            <a href="#" class="apply-btn" onclick="alert('Bu form yakında açılacaktır kral, şimdilik Rehber olabiliyorsun!')">Başvur →</a>
         </div>
     </div>
 
