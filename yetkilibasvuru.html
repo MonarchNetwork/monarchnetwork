@@ -3,157 +3,267 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monarch Network - Yetkili Başvurusu</title>
+<title>Monarch Network - Yetkili Başvuruları</title>
 <style>
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family: Arial, sans-serif;
 }
 
 body{
-background:#0f172a;
-color:white;
+background:#f8fafc; /* Fotoğraftaki gibi açık, ferah arka plan */
+color:#1e293b;
+padding: 50px 20px;
 display: flex;
-justify-content: center;
+flex-direction: column;
 align-items: center;
 min-height: 100vh;
-padding: 20px;
 }
 
-.form-box {
-background: #1e293b;
+.container {
+width: 100%;
+max-width: 900px;
+}
+
+.header-section {
+margin-bottom: 40px;
+}
+
+.header-section h1 {
+font-size: 32px;
+color: #0f172a;
+font-weight: bold;
+margin-bottom: 8px;
+}
+
+.header-section p {
+color: #64748b;
+font-size: 16px;
+}
+
+.form-list {
+display: flex;
+flex-direction: column;
+gap: 16px; /* Kartlar arasındaki boşluk */
+}
+
+.form-card {
+background: white;
+padding: 24px 30px;
+border-radius: 16px; /* Fotoğraftaki yumuşak köşeler */
+box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+display: flex;
+justify-content: space-between;
+align-items: center;
+border: 1px solid #e2e8f0;
+transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.form-card:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+}
+
+.card-info {
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+
+.card-title {
+font-size: 18px;
+color: #0f172a;
+font-weight: 600;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.card-title span {
+font-size: 20px; /* İkonlar için boy */
+}
+
+.card-meta {
+font-size: 14px;
+color: #94a3b8;
+display: flex;
+gap: 15px;
+}
+
+.apply-btn {
+color: #64748b;
+text-decoration: none;
+font-weight: bold;
+font-size: 15px;
+display: flex;
+align-items: center;
+gap: 5px;
+padding: 10px 16px;
+border-radius: 8px;
+transition: color 0.2s, background 0.2s;
+}
+
+.apply-btn:hover {
+color: #0f172a;
+background: #f1f5f9;
+}
+
+.back-home {
+display: inline-block;
+margin-top: 30px;
+color: #64748b;
+text-decoration: none;
+font-weight: 600;
+font-size: 14px;
+}
+
+.back-home:hover {
+color: #0f172a;
+text-decoration: underline;
+}
+
+/* Tıklayınca açılacak başvuru detay modalı */
+.modal {
+position: fixed;
+top: 0; left: 0; width: 100%; height: 100%;
+background: rgba(15, 23, 42, 0.6);
+display: none;
+justify-content: center;
+align-items: center;
+z-index: 1000;
+}
+.modal-content {
+background: white;
 padding: 40px;
-border-radius: 15px;
+border-radius: 20px;
 width: 100%;
 max-width: 500px;
-box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-border: 1px solid #334155;
+box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
 }
-
-h2 {
-color: gold;
-margin-bottom: 10px;
-text-align: center;
+.modal-content h2 { margin-bottom: 20px; color: #0f172a; }
+.modal-content input, .modal-content textarea {
+width: 100%; padding: 12px; margin: 10px 0 20px 0;
+border: 1px solid #cbd5e1; border-radius: 8px; outline: none;
 }
-
-p {
-color: #cbd5e1;
-font-size: 14px;
-text-align: center;
-margin-bottom: 25px;
+.modal-content textarea { height: 100px; resize: none; }
+.submit-btn {
+width: 100%; padding: 12px; background: #10b981;
+border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer;
 }
-
-label {
-display: block;
-margin-bottom: 5px;
-color: gold;
-font-size: 14px;
-font-weight: bold;
-}
-
-input, textarea, select {
-width: 100%;
-padding: 12px;
-margin-bottom: 20px;
-border: none;
-border-radius: 8px;
-background: #334155;
-color: white;
-outline: none;
-}
-
-textarea {
-height: 120px;
-resize: none;
-}
-
-.btn {
-width: 100%;
-padding: 14px;
-background: #10b981;
-border: none;
-border-radius: 8px;
-color: white;
-cursor: pointer;
-font-weight: bold;
-font-size: 16px;
-transition: background 0.2s;
-}
-
-.btn:hover {
-background: #059669;
-}
-
-.back-link {
-display: block;
-text-align: center;
-margin-top: 15px;
-color: #cbd5e1;
-text-decoration: none;
-font-size: 14px;
-}
-
-.back-link:hover {
-color: gold;
-text-decoration: underline;
+.submit-btn:hover { background: #059669; }
+.close-modal {
+text-align: center; display: block; margin-top: 15px; color: #64748b; text-decoration: none; cursor: pointer;
 }
 </style>
 </head>
 <body>
 
-<div class="form-box">
-    <h2>👑 Yetkili Başvuru Formu</h2>
-    <p>Monarch Network ekibine katılmak için lütfen formu eksiksiz doldurun.</p>
-    
-    <div id="formFields">
-        <label for="staffName">Adınız ve Yaşınız:</label>
-        <input type="text" id="staffName" placeholder="Örn: Ahmet, 17">
-
-        <label for="staffRole">Başvurduğunuz Yetki:</label>
-        <select id="staffRole">
-            <option value="Rehber">Rehber</option>
-            <option value="Moderatör">Moderatör</option>
-            <option value="Mimar (Builder)">Mimar (Builder)</option>
-            <option value="Reklamcı">Reklamcı</option>
-        </select>
-
-        <label for="staffExp">Deneyimleriniz ve Kendinizi Tanıtın:</label>
-        <textarea id="staffExp" placeholder="Daha önce hangi sunucularda yetkili oldunuz? Günde kaç saat aktif olabilirsiniz?"></textarea>
-
-        <button class="btn" onclick="sendStaffApp()">Başvuruyu Gönder</button>
+<div class="container">
+    <div class="header-section">
+        <h1>Yetkili başvurusu</h1>
+        <p>Ekibimize katılmak istiyorsan açık formlardan birini doldur.</p>
     </div>
-    
-    <a href="index.html" class="back-link">← Ana Sayfaya Dön</a>
+
+    <div class="form-list">
+        <!-- 1. Form -->
+        <div class="form-card">
+            <div class="card-info">
+                <div class="card-title"><span>📋</span> Rehber Başvurusu</div>
+                <div class="card-meta"><span>📂 15 soru</span></div>
+            </div>
+            <a href="#" class="apply-btn" onclick="openForm('Rehber')">Başvur →</a>
+        </div>
+
+        <!-- 2. Form -->
+        <div class="form-card">
+            <div class="card-info">
+                <div class="card-title"><span>📝</span> Moderatör Başvuru Formu</div>
+                <div class="card-meta"><span>📂 14 soru</span></div>
+            </div>
+            <a href="#" class="apply-btn" onclick="openForm('Moderatör')">Başvur →</a>
+        </div>
+
+        <!-- 3. Form -->
+        <div class="form-card">
+            <div class="card-info">
+                <div class="card-title"><span>🤝</span> SMP Partner Başvurusu</div>
+                <div class="card-meta"><span>📂 7 soru</span></div>
+            </div>
+            <a href="#" class="apply-btn" onclick="openForm('SMP Partner')">Başvur →</a>
+        </div>
+
+        <!-- 4. Form -->
+        <div class="form-card">
+            <div class="card-info">
+                <div class="card-title"><span>🛠️</span> Geliştirici Başvurusu [Paket Editleme]</div>
+                <div class="card-meta"><span>📂 12 soru</span></div>
+            </div>
+            <a href="#" class="apply-btn" onclick="openForm('Geliştirici (Paket)')">Başvur →</a>
+        </div>
+
+        <!-- 5. Form -->
+        <div class="form-card">
+            <div class="card-info">
+                <div class="card-title"><span>☕</span> Geliştirici Başvurusu [Java Eklenti Yapımı]</div>
+                <div class="card-meta"><span>📂 18 soru</span></div>
+            </div>
+            <a href="#" class="apply-btn" onclick="openForm('Geliştirici (Java)')">Başvur →</a>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-home">← Ana Sayfaya Dön</a>
+</div>
+
+<!-- BAŞVURU DETAY POPUP PENCERESİ -->
+<div id="applyModal" class="modal">
+    <div class="modal-content">
+        <h2 id="modalTitle">Başvuru Formu</h2>
+        <input type="text" id="applicantName" placeholder="Adınız ve Yaşınız">
+        <textarea id="applicantExp" placeholder="Deneyimleriniz ve kendinizi tanıtın..."></textarea>
+        <button class="submit-btn" onclick="submitApplication()">Başvuruyu Tamamla</button>
+        <span class="close-modal" onclick="closeForm()">Vazgeç</span>
+    </div>
 </div>
 
 <script>
-function sendStaffApp() {
-    // Giriş kontrolü yapıyoruz
+let selectedRole = "";
+
+function openForm(role) {
     const loggedInUser = localStorage.getItem("loggedInUser");
     if(!loggedInUser) {
-        alert("Başvuru yapabilmek için önce ana sayfadan giriş yapmalısınız!");
+        alert("Başvuru yapabilmek için önce ana sayfadan giriş yapmalısınız kral!");
         window.location.href = "index.html";
         return;
     }
+    selectedRole = role;
+    document.getElementById("modalTitle").innerText = role + " Başvurusu";
+    document.getElementById("applyModal").style.display = "flex";
+}
 
-    const nameAge = document.getElementById("staffName").value.trim();
-    const role = document.getElementById("staffRole").value;
-    const exp = document.getElementById("staffExp").value.trim();
+function closeForm() {
+    document.getElementById("applyModal").style.display = "none";
+}
+
+function submitApplication() {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    const nameAge = document.getElementById("applicantName").value.trim();
+    const exp = document.getElementById("applicantExp").value.trim();
 
     if(!nameAge || !exp) {
-        alert("Lütfen formdaki tüm alanları doldurun!");
+        alert("Lütfen tüm alanları doldurun!");
         return;
     }
 
-    // Ortak LocalStorage havuzuna kaydediyoruz (Böylece index.html'deki admin panelinde görünecek)
     let apps = JSON.parse(localStorage.getItem("site_apps")) || [];
-    apps.push({ user: loggedInUser, nameAge: nameAge, role: role, exp: exp });
+    apps.push({ user: loggedInUser, nameAge: nameAge, role: selectedRole, exp: exp });
     localStorage.setItem("site_apps", JSON.stringify(apps));
 
-    alert("Başvurunuz başarıyla alındı kral! Seni ana sayfaya yönlendiriyorum.");
-    window.location.href = "index.html";
+    alert("Harika! " + selectedRole + " başvurunuz başarıyla alındı. Admin paneline iletildi.");
+    document.getElementById("applicantName").value = "";
+    document.getElementById("applicantExp").value = "";
+    closeForm();
 }
 </script>
 
