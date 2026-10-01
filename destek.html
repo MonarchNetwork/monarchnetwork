@@ -269,80 +269,44 @@ async function sendTicket(event) {
         tarih: new Date().toLocaleString("tr-TR")
     };
 
-    alert("Talebiniz gönderiliyor, lütfen bekleyin...");
-    await saveToGitHub(dosyaYolu, veri);
-    alert(`Teşekkürler ${loggedInUser}! Talebiniz alındı. Sayfayı yenileyerek takip edebilirsiniz.`);
-    document.getElementById("supportForm").reset();
-    loadActiveTicket();
-}
+async function sendTicket(event) {
+    event.preventDefault();
+    
+    if (!loggedInUser) {
+        alert("Destek talebi oluşturabilmek için önce ana sayfadan giriş yapmalı veya kayıt olmalısınız!");
+        return;
+    }
 
-// Oyuncunun Kendi Ekranında Yanıtı Görme Fonksiyonu
-async function loadActiveTicket() {
-    const dosyaYolu = `database/destek_${loggedInUser}.json`;
-    const url = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/${dosyaYolu}`;
+    const category = document.getElementById("ticketCategory").value;
+    const subject = document.getElementById("ticketSubject").value.trim();
+    const message = document.getElementById("ticketMessage").value.trim();
+
+    // FORMSPREE LINKINI BURAYA YAPIŞTIR KANKA
+    const formspreeUrl = "https://formspree.io/f/xkjgakde";
+
+    alert("Talebiniz iletiliyor, lütfen bekleyin...");
 
     try {
-        const res = await fetch(url);
-        if(!res.ok) return; 
-        
-        const data = await res.json();
-        const icerik = JSON.parse(atob(data.content));
+        const response = await fetch(formspreeUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                Oyuncu: loggedInUser,
+                Kategori: category,
+                Konu: subject,
+                Mesaj: message
+            })
+        });
 
-        // Formun altına izleme alanını ekliyoruz
-        let trackDiv = document.getElementById("ticketTracking");
-        if(!trackDiv) {
-            trackDiv = document.createElement("div");
-            trackDiv.id = "ticketTracking";
-            trackDiv.style = "margin-top: 40px; border-top: 2px dashed #334155; padding-top: 25px;";
-            document.getElementById("supportForm").after(trackDiv);
+        if (response.ok) {
+            alert(`Teşekkürler ${loggedInUser}!\n\n[${category}] başlıklı destek talebiniz başarıyla oluşturuldu. Yetkililerimiz e-posta üzerinden inceleyip en kısa sürede size geri dönüş yapacaktır.`);
+            document.getElementById("supportForm").reset();
+        } else {
+            alert("Sistemsel bir hata oluştu, lütfen daha sonra tekrar deneyin.");
         }
-        
-        let kanitAlani = "";
-        if (icerik.kanit && icerik.kanit !== "Kanıt yüklenmedi") {
-            kanitAlani = `<p style="margin-top:10px;"><strong>📸 Kanıt:</strong><br><img src="${icerik.kanit}" style="max-width:100%; margin-top:5px; border-radius:5px;"></p>`;
-        }
-
-        trackDiv.innerHTML = `
-            <h2 style="color: gold; font-size: 22px; text-align: center; margin-bottom: 15px;">📜 Aktif Destek Talebiniz</h2>
-            <div style="border: 1px solid gold; padding: 20px; border-radius: 12px; background: #111827;">
-                <p><strong>📌 Kategori:</strong> ${icerik.kategori}</p>
-                <p><strong>📝 Konu:</strong> ${icerik.konu}</p>
-                <p><strong>💬 Mesajınız:</strong> ${icerik.mesaj}</p>
-                ${kanitAlani}
-                <hr style="margin:15px 0; border:0; border-top:1px dashed #334155;">
-                <p style="color:#ffcc00; font-size:16px;"><strong>👑 Yönetici Yanıtı:</strong></p>
-                <p style="color:#10b981; font-weight:bold; margin-top:5px; background:#0f172a; padding:10px; border-radius:5px;">${icerik.yoneticiYaniti}</p>
-            </div>
-        `;
-    } catch(e) { console.log(e); }
-}
-
-function convertFileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-}
-
-async function saveToGitHub(yol, veri) {
-    const url = `https://github.com{GITHUB_USER}/${GITHUB_REPO}/contents/${yol}`;
-    let sha = "";
-    try {
-        const check = await fetch(url);
-        if(check.ok) { const d = await check.json(); sha = d.sha; }
-    } catch(e){}
-
-    await fetch(url, {
-        method: "PUT",
-        headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-            message: `Destek: ${veri.oyuncu}`,
-            content: btoa(unescape(encodeURIComponent(JSON.stringify(veri, null, 2)))),
-            sha: sha ? sha : undefined
-        })
-    });
+    } catch (error) {
+        alert("Bağlantı hatası oluştu!");
+    }
 }
 
 window.onload = checkLoginStatus;
