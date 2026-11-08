@@ -523,18 +523,14 @@ footer {
 </footer>
 
 <script>
-// JSONbin.io Bulut Ayarları
-const JSONBIN_BIN_ID = localStorage.getItem("monarch_bin_id") || ""; 
-const JSONBIN_API_KEY = "$2a$10$ReL7i7tFxBeTHgCjp7THLO0De3wG.6x1kMku7oF7M4A8C2tSeVpE.";
+// npoint.io Bulut Veritabanı Bağlantısı
+const NPOINT_URL = "https://api.npoint.io/dfdb5d32c4b5f1e9698d";
 
 async function getSubmissions() {
-    if (!JSONBIN_BIN_ID) return JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
     try {
-        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-            headers: { 'X-Master-Key': JSONBIN_API_KEY }
-        });
+        const res = await fetch(NPOINT_URL);
         const data = await res.json();
-        return data.record || [];
+        return Array.isArray(data) ? data : [];
     } catch(e) {
         return JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
     }
@@ -542,34 +538,10 @@ async function getSubmissions() {
 
 async function saveSubmissions(submissions) {
     localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
-    if (!JSONBIN_BIN_ID) {
-        // İlk kayıtta otomatik bulut bin oluştur
-        try {
-            const res = await fetch("https://api.jsonbin.io/v3/b", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Master-Key": JSONBIN_API_KEY,
-                    "X-Bin-Name": "MonarchDatabase"
-                },
-                body: JSON.stringify(submissions)
-            });
-            const data = await res.json();
-            if (data.metadata && data.metadata.id) {
-                localStorage.setItem("monarch_bin_id", data.metadata.id);
-                location.reload();
-            }
-        } catch(e) {}
-        return;
-    }
-
     try {
-        await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Master-Key": JSONBIN_API_KEY
-            },
+        await fetch(NPOINT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(submissions)
         });
     } catch(e) {}
