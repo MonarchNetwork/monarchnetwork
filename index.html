@@ -3,238 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monarch Network</title>
+<title>Monarch Network - Türkiye'nin Yeni Nesil Minecraft Sunucusu</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-html{
-scroll-behavior:smooth;
+html {
+    scroll-behavior: smooth;
 }
 
-body{
-background:#0f172a;
-color:white;
+body {
+    background: #0d1117;
+    color: #e6edf3;
+    min-height: 100vh;
 }
 
-nav{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 10%;
-background:#111827;
+/* Header & Nav */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 8%;
+    background: rgba(22, 27, 34, 0.85);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.logo{
-color:gold;
-font-size:28px;
-font-weight:bold;
+.logo {
+    color: #f59e0b;
+    font-size: 24px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .nav-user {
-display: flex;
-align-items: center;
-gap: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .welcome-txt {
-color: gold;
-font-weight: bold;
+    color: #f59e0b;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.btn-nav {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s ease;
+}
+
+.btn-login {
+    background: transparent;
+    border: 1px solid #8b5cf6;
+    color: #8b5cf6;
+}
+
+.btn-login:hover {
+    background: #8b5cf6;
+    color: white;
+}
+
+.btn-register {
+    background: #8b5cf6;
+    color: white;
+}
+
+.btn-register:hover {
+    background: #7c3aed;
 }
 
 .logout-btn {
-background: #ef4444;
-padding: 8px 15px;
-border: none;
-border-radius: 5px;
-color: white;
-cursor: pointer;
-font-weight: bold;
+    background: #ef4444;
+    color: white;
 }
 
 .logout-btn:hover {
-background: #dc2626;
+    background: #dc2626;
 }
 
-.hero{
-text-align:center;
-padding:120px 20px;
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 70px 20px 40px;
+    background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
 }
 
-.hero h1{
-font-size:70px;
-color:gold;
+.hero h1 {
+    font-size: 56px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
 }
 
-.hero p{
-font-size:22px;
-margin:15px 0;
+.hero p {
+    font-size: 18px;
+    color: #9ca3af;
+    margin-bottom: 25px;
 }
 
-.btn{
-padding:15px 30px;
-background:#7c3aed;
-border:none;
-border-radius:10px;
-color:white;
-cursor:pointer;
-font-size:18px;
-margin:5px;
-text-decoration: none;
-display: inline-block;
-font-weight: bold;
+.ip-box {
+    display: inline-flex;
+    align-items: center;
+    background: #161b22;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 6px 6px 6px 20px;
+    gap: 15px;
 }
 
-.btn:hover{
-background:#6d28d9;
+.ip-text {
+    font-weight: 700;
+    color: #fbbf24;
+    font-size: 16px;
 }
 
-.btn-secondary {
-background: #3b82f6;
-}
-.btn-secondary:hover {
-background: #2563eb;
-}
-
-.cards{
-display:flex;
-justify-content:center;
-gap:20px;
-flex-wrap:wrap;
-padding:50px 20px;
+.copy-btn {
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.2s;
 }
 
-.card{
-background:#1e293b;
-padding:25px;
-border-radius:15px;
-width:280px;
-text-align:center;
+.copy-btn:hover {
+    background: #7c3aed;
 }
 
-.card h2{
-color:gold;
-margin-bottom:10px;
+/* Main Grid Layout (Chicken Network Style) */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-footer{
-text-align:center;
-padding:20px;
-background:#111827;
-margin-top:40px;
+.banner-box {
+    background: linear-gradient(90deg, #ec4899, #8b5cf6);
+    border-radius: 14px;
+    padding: 18px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-weight: 700;
 }
 
+.main-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+}
+
+@media(max-width: 850px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Side Column */
+.side-card {
+    background: #161b22;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.side-card h3 {
+    font-size: 16px;
+    color: #fbbf24;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Content Grid Cards */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+}
+
+.card {
+    background: #161b22;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 22px;
+    text-align: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+.card h3 {
+    color: #fbbf24;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.card p {
+    color: #9ca3af;
+    font-size: 13px;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.action-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    background: #8b5cf6;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background: #7c3aed;
+}
+
+.action-btn.green { background: #10b981; }
+.action-btn.green:hover { background: #059669; }
+.action-btn.blue { background: #3b82f6; }
+.action-btn.blue:hover { background: #2563eb; }
+
+/* Dynamic Modals */
 .modal-overlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: rgba(0, 0, 0, 0.75);
-display: flex;
-justify-content: center;
-align-items: center;
-z-index: 1000;
-opacity: 0;
-pointer-events: none;
-transition: all 0.3s ease;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000; opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease;
 }
 
 .modal-overlay.active {
-opacity: 1;
-pointer-events: auto;
+    opacity: 1; pointer-events: auto;
 }
 
 .modal-box {
-background: #1e293b;
-padding: 40px;
-border-radius: 15px;
-width: 360px;
-text-align: center;
-position: relative;
-box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    background: #161b22;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 30px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 480px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .close-btn {
-position: absolute;
-top: 15px;
-right: 20px;
-font-size: 24px;
-color: #cbd5e1;
-cursor: pointer;
+    position: absolute; top: 15px; right: 20px;
+    font-size: 22px; color: #9ca3af; cursor: pointer;
 }
 
 .modal-box h2 {
-color: gold;
-margin-bottom: 20px;
+    color: #fbbf24; margin-bottom: 15px; text-align: center;
 }
 
-.modal-box input {
-width: 100%;
-padding: 12px;
-margin: 10px 0;
-border: none;
-border-radius: 8px;
-background: #334155;
-color: white;
-outline: none;
+.modal-box input, .modal-box textarea, .modal-box select {
+    width: 100%; padding: 12px; margin: 8px 0 15px;
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+    background: #0d1117; color: white; outline: none;
 }
 
-.modal-box input::placeholder {
-color: #cbd5e1;
-}
+.modal-box textarea { resize: vertical; min-height: 90px; }
 
-.modal-box button {
-width: 100%;
-padding: 12px;
-background: #7c3aed;
-border: none;
-border-radius: 8px;
-color: white;
-cursor: pointer;
-font-weight: bold;
-margin-top: 10px;
-}
-
-.modal-box button:hover {
-background: #6d28d9;
-}
-
-.modal-box a {
-color: gold;
-text-decoration: none;
-font-weight: bold;
-}
-
-.modal-box a:hover {
-text-decoration: underline;
-}
-
-.modal-box p {
-margin: 15px 0;
-font-size: 14px;
-}
-
+/* Status Badges */
 .status-badge {
-display: inline-block;
-padding: 4px 12px;
-border-radius: 20px;
-font-size: 13px;
-font-weight: bold;
-margin-bottom: 8px;
+    display: inline-block; padding: 4px 10px;
+    border-radius: 20px; font-size: 12px; font-weight: 700;
 }
-.status-online {
-background: #10b981;
-color: white;
+.status-online { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+.status-offline { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+/* Admin & User Interaction Panels */
+.ticket-item {
+    background: #0d1117;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    font-size: 13px;
 }
-.status-offline {
-background: #ef4444;
-color: white;
+.ticket-user { font-weight: bold; color: #fbbf24; }
+.ticket-reply { background: rgba(139, 92, 246, 0.15); border-left: 3px solid #8b5cf6; padding: 8px; margin-top: 8px; border-radius: 4px; }
+
+footer {
+    text-align: center; padding: 25px;
+    background: #161b22; margin-top: 50px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: #6b7280; font-size: 14px;
 }
 </style>
 </head>
@@ -242,222 +333,86 @@ color: white;
 <body>
 
 <nav>
-<div class="logo">👑 MONARCH NETWORK</div>
-<div id="navAuth" class="nav-user"></div>
+    <div class="logo">👑 Monarch Network</div>
+    <div id="navAuth" class="nav-user"></div>
 </nav>
 
 <section class="hero">
-<h1>MONARCH NETWORK</h1>
-<p>Türkiye'nin Yeni Nesil Minecraft Sunucusu</p>
-<button class="btn" onclick="copyIP()">IP'yi Kopyala</button>
-</section>
-  
-<br><br>
-
-<center id="mainAuthBtn"></center>
- 
-<section class="cards">
-<div class="card" id="ip">
-<h2>🎮 Sunucu IP & Durum</h2>
-<p style="margin-bottom: 10px;">MonarchNetwork.aternos.me</p>
-<div id="serverStatusBox">
-<span id="statusBadge" class="status-badge status-offline">Kontrol ediliyor...</span>
-<p id="playerCount" style="font-size: 14px; color: #cbd5e1;">Oyuncu: -/-</p>
-</div>
-</div>
-
-<div class="card" id="discord">
-<h2>💬 Discord</h2>
-<p>Yakında Eklenecek</p>
-</div>
-<div class="card" id="market-card">
-<h2>💎 Sunucu Marketi</h2>
-<p style="margin-bottom: 15px;">VIP Paketleri ve Özellikler</p>
-<a href="market.html" class="btn" style="padding:8px 15px; font-size:14px; text-decoration:none;">Markete Git</a>
-</div>
-  <div class="card" id="destek-card">
-<h2>🛠️ Destek Sistemi</h2>
-<p style="margin-bottom: 15px;">Sorun Bildir veya Talep Aç</p>
-<a href="destek.html" class="btn btn-secondary" style="padding:8px 15px; font-size:14px; text-decoration:none;">Destek Al</a>
-</div>
-<div class="card" id="modlar">
-<h2>⚔️ Oyun Modları</h2>
-<p>SMP • Survival • Etkinlikler • Box PvP [Yakında]</p>
-</div>
-  <div class="card" id="basvuru-card">
-<h2>📝 Yetkili Başvurusu</h2>
-<p style="margin-bottom: 15px;">Ekibimize Katılmak İster misin?</p>
-<a href="yetkilibasvuru.html" class="btn" style="padding:8px 15px; font-size:14px; background:#10b981; text-decoration:none;">Başvuru Yap</a>
-</div>
+    <h1>MONARCH NETWORK</h1>
+    <p>Türkiye'nin Yeni Nesil Minecraft Sunucusu</p>
+    <div class="ip-box">
+        <span class="ip-text">MonarchNetwork.aternos.me</span>
+        <button class="copy-btn" onclick="copyIP()"><i class="fa-regular fa-copy"></i> IP Kopyala</button>
+    </div>
 </section>
 
-<div id="authModal" class="modal-overlay">
-    <div class="modal-box">
-        <span class="close-btn" onclick="toggleModal()">&times;</span>
-        
-        <div id="loginForm">
-            <h2>🔑 Giriş Yap</h2>
-            <input type="text" id="loginUser" placeholder="Kullanıcı Adı">
-            <input type="password" id="loginPass" placeholder="Şifre">
-            <button onclick="loginProcess()">Giriş Yap</button>
-            <p>Hesabın yok mu? <a href="#" onclick="switchMode('register')">Kayıt Ol</a></p>
-        </div>
+<div class="container">
 
-        <div id="registerForm" style="display: none;">
-            <h2>📝 Kayıt Ol</h2>
-            <input type="text" id="regUser" placeholder="Kullanıcı Adı">
-            <input type="email" id="regEmail" placeholder="E-posta Adresi">
-            <input type="password" id="regPass" placeholder="Şifre">
-            <input type="password" id="regPassRep" placeholder="Şifre Tekrar">
-            <button onclick="registerProcess()">Hesap Oluştur</button>
-            <p>Zaten hesabın var mı? <a href="#" onclick="switchMode('login')">Giriş Yap</a></p>
-        </div>
+    <!-- Duyuru Banner (Chicken Style) -->
+    <div class="banner-box">
+        <span>🔥 Sezon 1 Başladı! Hemen sunucuya katıl ve yerini al.</span>
+        <button class="copy-btn" style="background: white; color: #8b5cf6;" onclick="copyIP()">Katıl</button>
+    </div>
+
+    <div class="main-grid">
+        <!-- Sol Yan Bar -->
+        <aside>
+            <div class="side-card">
+                <h3><i class="fa-solid fa-server"></i> Sunucu Durumu</h3>
+                <div id="serverStatusBox">
+                    <span id="statusBadge" class="status-badge status-offline">Kontrol Ediliyor...</span>
+                    <p id="playerCount" style="margin-top: 8px; font-size: 13px; color: #9ca3af;">Oyuncu: -/-</p>
+                </div>
+            </div>
+
+            <div class="side-card" id="userPanelCard" style="display: none;">
+                <h3><i class="fa-solid fa-envelope-open-text"></i> Taleplerim</h3>
+                <div id="userTicketsList">
+                    <p style="font-size: 12px; color: #6b7280;">Henüz aktif bir talebin yok.</p>
+                </div>
+            </div>
+
+            <!-- Yönetici Kontrol Paneli (Sadece Admin Giriş Yapınca Görünür) -->
+            <div class="side-card" id="adminPanelCard" style="display: none; border-color: #f59e0b;">
+                <h3 style="color: #f59e0b;"><i class="fa-solid fa-user-shield"></i> Yönetici Paneli</h3>
+                <p style="font-size: 12px; color: #9ca3af; margin-bottom: 10px;">Gelen Destek & Başvurular:</p>
+                <div id="adminTicketsList"></div>
+            </div>
+        </aside>
+
+        <!-- Sağ Ana Modüller -->
+        <main class="cards-grid">
+            <div class="card">
+                <h3>💎 Sunucu Marketi</h3>
+                <p>VIP Paketleri, Edit Eşyalar ve Özel Üyelikler.</p>
+                <button class="action-btn" onclick="openMarketModal()">Markete Git</button>
+            </div>
+
+            <div class="card">
+                <h3>🛠️ Destek Sistemi</h3>
+                <p>Sorun bildir, şikayette bulun veya talep aç.</p>
+                <button class="action-btn blue" onclick="openTicketModal()">Destek Talebi Aç</button>
+            </div>
+
+            <div class="card">
+                <h3>📝 Yetkili Başvurusu</h3>
+                <p>Sunucu ekibimize katılarak yetkili ol!</p>
+                <button class="action-btn green" onclick="openApplyModal()">Başvuru Yap</button>
+            </div>
+
+            <div class="card">
+                <h3>⚔️ Oyun Modları</h3>
+                <p>SMP • Survival • Etkinlikler • BoxPvP</p>
+                <button class="action-btn" style="background: #374151;" disabled>Yakında</button>
+            </div>
+        </main>
     </div>
 </div>
 
-<footer>
-© Monarch Network
-</footer>
-
-<script>
-function copyIP(){
-navigator.clipboard.writeText("MonarchNetwork.aternos.me");
-alert("IP Kopyalandı: MonarchNetwork.aternos.me");
-}
-
-function toggleModal(defaultMode = 'login') {
-    const modal = document.getElementById("authModal");
-    modal.classList.toggle("active");
-    if (modal.classList.contains("active")) {
-        switchMode(defaultMode);
-    }
-}
-
-function switchMode(mode) {
-    if(mode === 'register') {
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("registerForm").style.display = "block";
-    } else {
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("registerForm").style.display = "none";
-    }
-}
-
-function checkLogin() {
-    const loggedInUser = localStorage.getItem("loggedInUser");
-    const navAuth = document.getElementById("navAuth");
-    const mainAuthBtn = document.getElementById("mainAuthBtn");
-
-    if (loggedInUser) {
-        navAuth.innerHTML = `
-            <span class="welcome-txt">👋 Hoş geldin, ${loggedInUser}!</span>
-            <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
-        `;
-        mainAuthBtn.innerHTML = `<span style="color:gold; font-size:20px; font-weight:bold;">Siteye Giriş Yapıldı. Keyifli Vakit Geçiriniz!</span>`;
-    } else {
-        navAuth.innerHTML = `
-            <button onclick="toggleModal('login')" class="btn" style="padding:8px 15px; font-size:14px; background:transparent; border:1px solid #7c3aed;">🔑 Giriş Yap</button>
-            <button onclick="toggleModal('register')" class="btn" style="padding:8px 15px; font-size:14px;">📝 Kayıt Ol</button>
-        `;
-        mainAuthBtn.innerHTML = `
-            <button onclick="toggleModal('login')" class="btn">🔑 Giriş Yap</button>
-            <button onclick="toggleModal('register')" class="btn btn-secondary">📝 Kayıt Ol</button>
-        `;
-    }
-}
-
-function loginProcess() {
-    const user = document.getElementById("loginUser").value.trim();
-    const pass = document.getElementById("loginPass").value;
-
-    if(!user || !pass) {
-        alert("Lütfen tüm alanları doldurun!");
-        return;
-    }
-
-    const savedPass = localStorage.getItem("user_" + user);
-
-    if(savedPass && savedPass === pass) {
-        localStorage.setItem("loggedInUser", user);
-        alert("Giriş başarılı!");
-        
-        document.getElementById("loginUser").value = "";
-        document.getElementById("loginPass").value = "";
-        
-        toggleModal();
-        checkLogin();
-    } else {
-        alert("Kullanıcı adı veya şifre hatalı!");
-    }
-}
-
-function registerProcess() {
-    const user = document.getElementById("regUser").value.trim();
-    const email = document.getElementById("regEmail").value.trim();
-    const pass = document.getElementById("regPass").value;
-    const passRep = document.getElementById("regPassRep").value;
-
-    if(!user || !email || !pass || !passRep) {
-        alert("Lütfen tüm alanları doldurun!");
-        return;
-    }
-
-    if(pass !== passRep) {
-        alert("Şifreler eşleşmiyor!");
-        return;
-    }
-
-    if(localStorage.getItem("user_" + user)) {
-        alert("Bu kullanıcı adı zaten alınmış!");
-        return;
-    }
-
-    localStorage.setItem("user_" + user, pass);
-    alert("Kayıt başarılı! Şimdi aynı bilgilerle giriş yapabilirsiniz.");
-    
-    document.getElementById("regUser").value = "";
-    document.getElementById("regEmail").value = "";
-    document.getElementById("regPass").value = "";
-    document.getElementById("regPassRep").value = "";
-    
-    switchMode('login');
-}
-
-function logout() {
-    localStorage.removeItem("loggedInUser");
-    alert("Başarıyla çıkış yapıldı!");
-    checkLogin();
-}
-
-async function checkServerStatus() {
-    const badge = document.getElementById("statusBadge");
-    const count = document.getElementById("playerCount");
-    try {
-        const res = await fetch("https://mcsrvstat.us");
-        const data = await res.json();
-        
-        if (data.online) {
-            badge.className = "status-badge status-online";
-            badge.textContent = "AÇIK";
-            count.textContent = `Oyuncu: ${data.players.online} / ${data.players.max}`;
-        } else {
-            badge.className = "status-badge status-offline";
-            badge.textContent = "KAPALI";
-            count.textContent = "Oyuncu: 0 / 0";
-        }
-    } catch (e) {
-        badge.className = "status-badge status-offline";
-        badge.textContent = "KAPALI";
-        count.textContent = "Oyuncu: -/-";
-    }
-}
-
-window.onload = function() {
-    checkLogin();
-    checkServerStatus();
-    setInterval(checkServerStatus, 30000); // Her 30 saniyede bir durumu günceller
-};
-</script>
-
-</body>
-</html>
+<!-- Giriş & Kayıt Modal -->
+<div id="authModal" class="modal-overlay">
+    <div class="modal-box">
+        <span class="close-btn" onclick="closeModal('authModal')">&times;</span>
+        <div id="loginForm">
+            <h2>🔑 Giriş Yap</h2>
+            <input type="text" id="loginUser" placeholder="Kullanıcı Adı">
