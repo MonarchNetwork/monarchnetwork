@@ -477,7 +477,7 @@ footer {
         <span class="close-btn" onclick="closeModal('notiModal')">&times;</span>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <h2 style="color: #fbbf24;"><i class="fa-solid fa-bell"></i> Bildirimlerin</h2>
-            <button class="action-btn green" style="padding: 6px 12px; font-size: 12px; width: auto;" onclick="markAllAsRead()">✅ Okundu Yap & Temizle</button>
+            <button class="action-btn red" style="padding: 6px 12px; font-size: 12px; width: auto;" onclick="markAllAsRead()">🗑️ Bildirimleri Temizle</button>
         </div>
         <div id="userNotiList"></div>
     </div>
@@ -506,11 +506,11 @@ footer {
     </div>
 </div>
 
-<!-- Şık Özel Onay Modalı (Çirkin Tarayıcı Uyarısı Yerine) -->
+<!-- Şık Özel Onay Modalı -->
 <div id="confirmModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 380px; text-align: center;">
-        <h2 style="color: #fbbf24; margin-bottom: 15px;"><i class="fa-solid fa-triangle-exclamation"></i> Emin misin?</h2>
-        <p style="font-size: 14px; color: #9ca3af; margin-bottom: 20px;">Kurucu panelindeki tüm talepleri silmek istediğine emin misin kral?</p>
+        <h2 style="color: #fbbf24; margin-bottom: 15px;"><i class="fa-solid fa-triangle-exclamation"></i> Emin misiniz?</h2>
+        <p style="font-size: 14px; color: #9ca3af; margin-bottom: 20px;">Kurucu panelindeki tüm talepleri silmek istediğinize emin misiniz?</p>
         <div style="display: flex; gap: 10px;">
             <button class="action-btn red" onclick="executeClearSubmissions()">Evet, Sil</button>
             <button class="action-btn" style="background: #374151;" onclick="closeModal('confirmModal')">Vazgeç</button>
@@ -610,7 +610,7 @@ function markAllAsRead() {
     localStorage.removeItem("user_notifications_" + loggedUser);
     closeModal('notiModal');
     checkLogin();
-    showNotification("Zildeki bildirimlerin temizlendi!", true);
+    showNotification("Bildirimler temizlendi!", true);
 }
 
 function logout() {
