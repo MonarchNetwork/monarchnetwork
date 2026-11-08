@@ -493,15 +493,28 @@ footer {
     </div>
 </div>
 
+<!-- Kurucu Paneli -->
 <div id="adminPanelModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 700px;">
         <span class="close-btn" onclick="closeModal('adminPanelModal')">&times;</span>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <h2 style="color: #fbbf24;"><i class="fa-solid fa-user-shield"></i> Monarch Network - Kurucu Paneli</h2>
-            <button class="action-btn red" style="padding: 6px 12px; font-size: 12px; width: auto;" onclick="clearAllSubmissions()">🗑️ Panel Taleplerini Temizle</button>
+            <button class="action-btn red" style="padding: 6px 12px; font-size: 12px; width: auto;" onclick="confirmClearSubmissions()">🗑️ Panel Taleplerini Temizle</button>
         </div>
         <p style="font-size: 13px; color: #9ca3af; margin-bottom: 15px;">Oyuncuların gönderdiği tüm destek talepleri ve başvurular:</p>
         <div id="adminAllSubmissions"></div>
+    </div>
+</div>
+
+<!-- Şık Özel Onay Modalı (Çirkin Tarayıcı Uyarısı Yerine) -->
+<div id="confirmModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 380px; text-align: center;">
+        <h2 style="color: #fbbf24; margin-bottom: 15px;"><i class="fa-solid fa-triangle-exclamation"></i> Emin misin?</h2>
+        <p style="font-size: 14px; color: #9ca3af; margin-bottom: 20px;">Kurucu panelindeki tüm talepleri silmek istediğine emin misin kral?</p>
+        <div style="display: flex; gap: 10px;">
+            <button class="action-btn red" onclick="executeClearSubmissions()">Evet, Sil</button>
+            <button class="action-btn" style="background: #374151;" onclick="closeModal('confirmModal')">Vazgeç</button>
+        </div>
     </div>
 </div>
 
@@ -590,7 +603,6 @@ function openUserNotis() {
     openModal('notiModal');
 }
 
-// Oyuncu Zildeki Kendi Bildirimlerini Temizler (Kurucu Panelini Etkilemez)
 function markAllAsRead() {
     const loggedUser = localStorage.getItem("loggedInUser");
     if (!loggedUser) return;
@@ -707,7 +719,6 @@ function saveAdminReply(index) {
         item.status = item.type === "Başvuru" ? "KABUL EDİLDİ" : "CEVAPLANDI";
     }
 
-    // Oyuncunun Kendi Özel Bildirim Kutuna Bağımsız Kaydetme (Zili Tetikler)
     let userNotis = JSON.parse(localStorage.getItem("user_notifications_" + item.user) || "[]");
     userNotis.push({
         id: Date.now(),
@@ -725,13 +736,15 @@ function saveAdminReply(index) {
     checkLogin();
 }
 
-// Sadece Kurucu Panelindeki Listeyi Temizler (Oyuncunun Zilini Etkilemez)
-function clearAllSubmissions() {
-    if (confirm("Kurucu panelindeki tüm talepleri silmek istediğine emin misin?")) {
-        localStorage.removeItem("monarch_submissions");
-        loadAdminSubmissions();
-        showNotification("Kurucu paneli temizlendi!", true);
-    }
+function confirmClearSubmissions() {
+    openModal('confirmModal');
+}
+
+function executeClearSubmissions() {
+    localStorage.removeItem("monarch_submissions");
+    closeModal('confirmModal');
+    loadAdminSubmissions();
+    showNotification("Kurucu paneli tamamen temizlendi!", true);
 }
 
 async function checkServerStatus() {
