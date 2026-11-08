@@ -523,30 +523,6 @@ footer {
 </footer>
 
 <script>
-// npoint.io Bulut Veritabanı Bağlantısı
-const NPOINT_URL = "https://api.npoint.io/dfdb5d32c4b5f1e9698d";
-
-async function getSubmissions() {
-    try {
-        const res = await fetch(NPOINT_URL);
-        const data = await res.json();
-        return Array.isArray(data) ? data : [];
-    } catch(e) {
-        return JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
-    }
-}
-
-async function saveSubmissions(submissions) {
-    localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
-    try {
-        await fetch(NPOINT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(submissions)
-        });
-    } catch(e) {}
-}
-
 function showNotification(message, isSuccess = false) {
     const alertBox = document.getElementById("customAlert");
     alertBox.textContent = message;
@@ -567,7 +543,7 @@ function closeModal(id) { document.getElementById(id).classList.remove("active")
 function switchToRegister() { closeModal('loginModal'); openModal('registerModal'); }
 function switchToLogin() { closeModal('registerModal'); openModal('loginModal'); }
 
-async function checkLogin() {
+function checkLogin() {
     const loggedUser = localStorage.getItem("loggedInUser");
     const navAuth = document.getElementById("navAuth");
     let authHTML = `<button class="btn-nav admin-nav-btn" onclick="openModal('adminPassModal')"><i class="fa-solid fa-shield-halved"></i> Kurucu Paneli</button>`;
@@ -575,7 +551,8 @@ async function checkLogin() {
     let count = 0;
     if (loggedUser) {
         const userNotis = JSON.parse(localStorage.getItem("user_notifications_" + loggedUser) || "[]");
-        count = userNotis.filter(n => !n.read).length;
+        const unreadCount = userNotis.filter(n => !n.read).length;
+        count = unreadCount;
     }
 
     authHTML += `
@@ -599,7 +576,7 @@ async function checkLogin() {
     navAuth.innerHTML = authHTML;
 }
 
-async function openUserNotis() {
+function openUserNotis() {
     const loggedUser = localStorage.getItem("loggedInUser");
     if (!loggedUser) {
         showNotification("Bildirimleri görebilmek için önce giriş yapmalısın!");
@@ -627,6 +604,7 @@ async function openUserNotis() {
     openModal('notiModal');
 }
 
+// Okundu Olarak İşaretle (Bildirim Geçmişini Silmez, Sadece Zildeki Sayıyı Sıfırlar)
 function markAllAsRead() {
     const loggedUser = localStorage.getItem("loggedInUser");
     if (!loggedUser) return;
@@ -702,11 +680,9 @@ function verifyAdminPassword() {
     }
 }
 
-async function loadAdminSubmissions() {
+function loadAdminSubmissions() {
     const container = document.getElementById("adminAllSubmissions");
-    container.innerHTML = `<p style="text-align:center; color:#fbbf24; padding:20px;">Buluttan veriler yükleniyor...</p>`;
-    
-    const submissions = await getSubmissions();
+    const submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
 
     if (submissions.length === 0) {
         container.innerHTML = `<p style="text-align:center; color:#6b7280; padding:20px;">Henüz gelen bir destek talebi veya başvuru bulunmuyor.</p>`;
@@ -733,8 +709,8 @@ async function loadAdminSubmissions() {
     `).join('');
 }
 
-async function saveAdminReply(index) {
-    let submissions = await getSubmissions();
+function saveAdminReply(index) {
+    let submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
     const replyText = document.getElementById(`adminReply_${index}`).value.trim();
     if (!replyText) { showNotification("Lütfen bir yanıt yaz!"); return; }
 
@@ -760,8 +736,8 @@ async function saveAdminReply(index) {
     });
     localStorage.setItem("user_notifications_" + item.user, JSON.stringify(userNotis));
 
-    await saveSubmissions(submissions);
-    showNotification("Yanıt kaydedildi ve buluta gönderildi!", true);
+    localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
+    showNotification("Yanıt kaydedildi ve oyuncu bildirimine gönderildi!", true);
     loadAdminSubmissions();
     checkLogin();
 }
@@ -770,11 +746,11 @@ function confirmClearSubmissions() {
     openModal('confirmModal');
 }
 
-async function executeClearSubmissions() {
-    await saveSubmissions([]);
+function executeClearSubmissions() {
+    localStorage.removeItem("monarch_submissions");
     closeModal('confirmModal');
     loadAdminSubmissions();
-    showNotification("Kurucu paneli bulutta tamamen temizlendi!", true);
+    showNotification("Kurucu paneli tamamen temizlendi!", true);
 }
 
 async function checkServerStatus() {
