@@ -296,7 +296,7 @@ nav {
     padding: 30px;
     border-radius: 16px;
     width: 90%;
-    max-width: 650px;
+    max-width: 450px;
     position: relative;
     max-height: 85vh;
     overflow-y: auto;
@@ -304,6 +304,11 @@ nav {
 .close-btn {
     position: absolute; top: 15px; right: 20px;
     font-size: 22px; color: #9ca3af; cursor: pointer;
+}
+.modal-box input {
+    width: 100%; padding: 12px; margin: 10px 0;
+    background: #0d1117; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; color: white; outline: none;
 }
 .admin-item {
     background: #0d1117;
@@ -315,7 +320,7 @@ nav {
     text-align: left;
 }
 
-/* Site İçi Şık Bildirim Kutusu (Tarayıcı uyarısı yerine) */
+/* Site İçi Şık Bildirim Kutusu */
 #customAlert {
     position: fixed;
     top: 30px; right: 30px;
@@ -329,7 +334,6 @@ nav {
     display: none;
     font-weight: 600;
     font-size: 14px;
-    animation: fadeInOut 3s ease;
 }
 #customAlert.success {
     border-left-color: #10b981;
@@ -413,6 +417,31 @@ footer {
     </div>
 </div>
 
+<!-- Giriş Yap Modalı -->
+<div id="loginModal" class="modal-overlay">
+    <div class="modal-box" style="text-align: center;">
+        <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
+        <h2 style="color: #fbbf24; margin-bottom: 20px;"><i class="fa-solid fa-key"></i> Giriş Yap</h2>
+        <input type="text" id="loginUser" placeholder="Kullanıcı Adı">
+        <input type="password" id="loginPass" placeholder="Şifre">
+        <button class="action-btn" style="margin-top:15px;" onclick="loginProcess()">Giriş Yap</button>
+        <p style="margin-top: 15px; font-size: 13px; color: #9ca3af;">Hesabın yok mu? <a href="#" style="color: #fbbf24;" onclick="switchToRegister()">Kayıt Ol</a></p>
+    </div>
+</div>
+
+<!-- Kayıt Ol Modalı -->
+<div id="registerModal" class="modal-overlay">
+    <div class="modal-box" style="text-align: center;">
+        <span class="close-btn" onclick="closeModal('registerModal')">&times;</span>
+        <h2 style="color: #fbbf24; margin-bottom: 20px;"><i class="fa-solid fa-user-plus"></i> Kayıt Ol</h2>
+        <input type="text" id="regUser" placeholder="Kullanıcı Adı">
+        <input type="email" id="regEmail" placeholder="E-posta Adresi">
+        <input type="password" id="regPass" placeholder="Şifre">
+        <button class="action-btn green" style="margin-top:15px;" onclick="registerProcess()">Hesap Oluştur</button>
+        <p style="margin-top: 15px; font-size: 13px; color: #9ca3af;">Zaten hesabın var mı? <a href="#" style="color: #fbbf24;" onclick="switchToLogin()">Giriş Yap</a></p>
+    </div>
+</div>
+
 <!-- Kurucu Şifre Modalı -->
 <div id="adminPassModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 380px; text-align: center;">
@@ -426,7 +455,7 @@ footer {
 
 <!-- Yönetici Paneli Modalı -->
 <div id="adminPanelModal" class="modal-overlay">
-    <div class="modal-box">
+    <div class="modal-box" style="max-width: 650px;">
         <span class="close-btn" onclick="closeModal('adminPanelModal')">&times;</span>
         <h2 style="color: #fbbf24; margin-bottom: 15px;"><i class="fa-solid fa-user-shield"></i> Monarch Network - Kurucu Paneli</h2>
         <p style="font-size: 13px; color: #9ca3af; margin-bottom: 15px;">Oyuncuların gönderdiği tüm destek talepleri ve yetkili başvuruları:</p>
@@ -461,6 +490,16 @@ function copyIP() {
 function openModal(id) { document.getElementById(id).classList.add("active"); }
 function closeModal(id) { document.getElementById(id).classList.remove("active"); }
 
+function switchToRegister() {
+    closeModal('loginModal');
+    openModal('registerModal');
+}
+
+function switchToLogin() {
+    closeModal('registerModal');
+    openModal('loginModal');
+}
+
 function checkLogin() {
     const loggedUser = localStorage.getItem("loggedInUser");
     const navAuth = document.getElementById("navAuth");
@@ -474,8 +513,8 @@ function checkLogin() {
         `;
     } else {
         authHTML += `
-            <a href="giris.html" class="btn-nav btn-login">🔑 Giriş</a>
-            <a href="kayit.html" class="btn-nav btn-register">📝 Kayıt</a>
+            <button class="btn-nav btn-login" onclick="openModal('loginModal')">🔑 Giriş Yap</button>
+            <button class="btn-nav btn-register" onclick="openModal('registerModal')">📝 Kayıt Ol</button>
         `;
     }
     navAuth.innerHTML = authHTML;
@@ -485,6 +524,54 @@ function logout() {
     localStorage.removeItem("loggedInUser");
     checkLogin();
     showNotification("Başarıyla çıkış yapıldı.", true);
+}
+
+function loginProcess() {
+    const user = document.getElementById("loginUser").value.trim();
+    const pass = document.getElementById("loginPass").value;
+
+    if (!user || !pass) {
+        showNotification("Lütfen tüm alanları doldurun!");
+        return;
+    }
+
+    const savedPass = localStorage.getItem("user_" + user);
+
+    if (savedPass && savedPass === pass) {
+        localStorage.setItem("loggedInUser", user);
+        closeModal('loginModal');
+        document.getElementById("loginUser").value = "";
+        document.getElementById("loginPass").value = "";
+        checkLogin();
+        showNotification("Giriş başarılı! Hoş geldin " + user, true);
+    } else {
+        showNotification("Kullanıcı adı veya şifre hatalı!");
+    }
+}
+
+function registerProcess() {
+    const user = document.getElementById("regUser").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const pass = document.getElementById("regPass").value;
+
+    if (!user || !email || !pass) {
+        showNotification("Lütfen tüm alanları doldurun!");
+        return;
+    }
+
+    if (localStorage.getItem("user_" + user)) {
+        showNotification("Bu kullanıcı adı zaten alınmış!");
+        return;
+    }
+
+    localStorage.setItem("user_" + user, pass);
+    localStorage.setItem("loggedInUser", user);
+    closeModal('registerModal');
+    document.getElementById("regUser").value = "";
+    document.getElementById("regEmail").value = "";
+    document.getElementById("regPass").value = "";
+    checkLogin();
+    showNotification("Kayıt başarılı ve otomatik giriş yapıldı!", true);
 }
 
 // Şifre Kontrolü
