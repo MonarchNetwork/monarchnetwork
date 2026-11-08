@@ -523,6 +523,58 @@ footer {
 </footer>
 
 <script>
+// JSONbin.io Bulut Ayarları
+const JSONBIN_BIN_ID = localStorage.getItem("monarch_bin_id") || ""; 
+const JSONBIN_API_KEY = "$2a$10$ReL7i7tFxBeTHgCjp7THLO0De3wG.6x1kMku7oF7M4A8C2tSeVpE.";
+
+async function getSubmissions() {
+    if (!JSONBIN_BIN_ID) return JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
+    try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+            headers: { 'X-Master-Key': JSONBIN_API_KEY }
+        });
+        const data = await res.json();
+        return data.record || [];
+    } catch(e) {
+        return JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
+    }
+}
+
+async function saveSubmissions(submissions) {
+    localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
+    if (!JSONBIN_BIN_ID) {
+        // İlk kayıtta otomatik bulut bin oluştur
+        try {
+            const res = await fetch("https://api.jsonbin.io/v3/b", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Master-Key": JSONBIN_API_KEY,
+                    "X-Bin-Name": "MonarchDatabase"
+                },
+                body: JSON.stringify(submissions)
+            });
+            const data = await res.json();
+            if (data.metadata && data.metadata.id) {
+                localStorage.setItem("monarch_bin_id", data.metadata.id);
+                location.reload();
+            }
+        } catch(e) {}
+        return;
+    }
+
+    try {
+        await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Master-Key": JSONBIN_API_KEY
+            },
+            body: JSON.stringify(submissions)
+        });
+    } catch(e) {}
+}
+
 function showNotification(message, isSuccess = false) {
     const alertBox = document.getElementById("customAlert");
     alertBox.textContent = message;
@@ -543,7 +595,7 @@ function closeModal(id) { document.getElementById(id).classList.remove("active")
 function switchToRegister() { closeModal('loginModal'); openModal('registerModal'); }
 function switchToLogin() { closeModal('registerModal'); openModal('loginModal'); }
 
-function checkLogin() {
+async function checkLogin() {
     const loggedUser = localStorage.getItem("loggedInUser");
     const navAuth = document.getElementById("navAuth");
     let authHTML = `<button class="btn-nav admin-nav-btn" onclick="openModal('adminPassModal')"><i class="fa-solid fa-shield-halved"></i> Kurucu Paneli</button>`;
@@ -551,8 +603,7 @@ function checkLogin() {
     let count = 0;
     if (loggedUser) {
         const userNotis = JSON.parse(localStorage.getItem("user_notifications_" + loggedUser) || "[]");
-        const unreadCount = userNotis.filter(n => !n.read).length;
-        count = unreadCount;
+        count = userNotis.filter(n => !n.read).length;
     }
 
     authHTML += `
@@ -576,7 +627,7 @@ function checkLogin() {
     navAuth.innerHTML = authHTML;
 }
 
-function openUserNotis() {
+async function openUserNotis() {
     const loggedUser = localStorage.getItem("loggedInUser");
     if (!loggedUser) {
         showNotification("Bildirimleri görebilmek için önce giriş yapmalısın!");
@@ -604,7 +655,6 @@ function openUserNotis() {
     openModal('notiModal');
 }
 
-// Okundu Olarak İşaretle (Bildirim Geçmişini Silmez, Sadece Zildeki Sayıyı Sıfırlar)
 function markAllAsRead() {
     const loggedUser = localStorage.getItem("loggedInUser");
     if (!loggedUser) return;
@@ -680,9 +730,11 @@ function verifyAdminPassword() {
     }
 }
 
-function loadAdminSubmissions() {
+async function loadAdminSubmissions() {
     const container = document.getElementById("adminAllSubmissions");
-    const submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
+    container.innerHTML = `<p style="text-align:center; color:#fbbf24; padding:20px;">Buluttan veriler yükleniyor...</p>`;
+    
+    const submissions = await getSubmissions();
 
     if (submissions.length === 0) {
         container.innerHTML = `<p style="text-align:center; color:#6b7280; padding:20px;">Henüz gelen bir destek talebi veya başvuru bulunmuyor.</p>`;
@@ -709,8 +761,8 @@ function loadAdminSubmissions() {
     `).join('');
 }
 
-function saveAdminReply(index) {
-    let submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
+async function saveAdminReply(index) {
+    let submissions = await getSubmissions();
     const replyText = document.getElementById(`adminReply_${index}`).value.trim();
     if (!replyText) { showNotification("Lütfen bir yanıt yaz!"); return; }
 
@@ -736,8 +788,8 @@ function saveAdminReply(index) {
     });
     localStorage.setItem("user_notifications_" + item.user, JSON.stringify(userNotis));
 
-    localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
-    showNotification("Yanıt kaydedildi ve oyuncu bildirimine gönderildi!", true);
+    await saveSubmissions(submissions);
+    showNotification("Yanıt kaydedildi ve buluta gönderildi!", true);
     loadAdminSubmissions();
     checkLogin();
 }
@@ -746,11 +798,11 @@ function confirmClearSubmissions() {
     openModal('confirmModal');
 }
 
-function executeClearSubmissions() {
-    localStorage.removeItem("monarch_submissions");
+async function executeClearSubmissions() {
+    await saveSubmissions([]);
     closeModal('confirmModal');
     loadAdminSubmissions();
-    showNotification("Kurucu paneli tamamen temizlendi!", true);
+    showNotification("Kurucu paneli bulutta tamamen temizlendi!", true);
 }
 
 async function checkServerStatus() {
