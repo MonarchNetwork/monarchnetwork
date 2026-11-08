@@ -477,7 +477,7 @@ footer {
         <span class="close-btn" onclick="closeModal('notiModal')">&times;</span>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <h2 style="color: #fbbf24;"><i class="fa-solid fa-bell"></i> Bildirimlerin</h2>
-            <button class="action-btn red" style="padding: 6px 12px; font-size: 12px; width: auto;" onclick="markAllAsRead()">🗑️ Bildirimleri Temizle</button>
+            <button class="action-btn green" style="padding: 6px 12px; font-size: 12px; width: auto;" onclick="markAllAsRead()">✅ Okundu Olarak İşaretle</button>
         </div>
         <div id="userNotiList"></div>
     </div>
@@ -506,7 +506,7 @@ footer {
     </div>
 </div>
 
-<!-- Şık Özel Onay Modalı -->
+<!-- Onay Modalı -->
 <div id="confirmModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 380px; text-align: center;">
         <h2 style="color: #fbbf24; margin-bottom: 15px;"><i class="fa-solid fa-triangle-exclamation"></i> Emin misiniz?</h2>
@@ -551,7 +551,8 @@ function checkLogin() {
     let count = 0;
     if (loggedUser) {
         const userNotis = JSON.parse(localStorage.getItem("user_notifications_" + loggedUser) || "[]");
-        count = userNotis.length;
+        const unreadCount = userNotis.filter(n => !n.read).length;
+        count = unreadCount;
     }
 
     authHTML += `
@@ -603,14 +604,18 @@ function openUserNotis() {
     openModal('notiModal');
 }
 
+// Okundu Olarak İşaretle (Bildirim Geçmişini Silmez, Sadece Zildeki Sayıyı Sıfırlar)
 function markAllAsRead() {
     const loggedUser = localStorage.getItem("loggedInUser");
     if (!loggedUser) return;
 
-    localStorage.removeItem("user_notifications_" + loggedUser);
+    let userNotis = JSON.parse(localStorage.getItem("user_notifications_" + loggedUser) || "[]");
+    userNotis.forEach(n => n.read = true);
+    localStorage.setItem("user_notifications_" + loggedUser, JSON.stringify(userNotis));
+
     closeModal('notiModal');
     checkLogin();
-    showNotification("Bildirimler temizlendi!", true);
+    showNotification("Bildirimler okundu olarak işaretlendi.", true);
 }
 
 function logout() {
@@ -726,7 +731,8 @@ function saveAdminReply(index) {
         title: item.title,
         content: item.content,
         status: item.status,
-        reply: item.reply
+        reply: item.reply,
+        read: false
     });
     localStorage.setItem("user_notifications_" + item.user, JSON.stringify(userNotis));
 
