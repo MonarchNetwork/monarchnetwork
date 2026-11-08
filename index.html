@@ -262,7 +262,7 @@ nav {
 }
 
 .action-btn:hover {
-    background: #7c3aed;
+    background: #6d28d9;
 }
 
 .action-btn.green { background: #10b981; }
@@ -355,9 +355,7 @@ footer {
 
 <nav>
     <div class="logo">👑 Monarch Network</div>
-    <div class="nav-user" id="navAuth">
-        <!-- Dinamik Butonlar -->
-    </div>
+    <div class="nav-user" id="navAuth"></div>
 </nav>
 
 <section class="hero">
@@ -370,14 +368,12 @@ footer {
 </section>
 
 <div class="container">
-
     <div class="banner-box">
         <span>🔥 Sezon 1 Başladı! Hemen sunucuya katıl ve yerini al.</span>
         <button class="copy-btn" style="background: white; color: #8b5cf6;" onclick="copyIP()">Katıl</button>
     </div>
 
     <div class="main-grid">
-        <!-- Sol Yan Bar -->
         <aside>
             <div class="side-card">
                 <h3><i class="fa-solid fa-server"></i> Sunucu Durumu</h3>
@@ -388,17 +384,16 @@ footer {
             </div>
         </aside>
 
-        <!-- Sağ Ana Modüller -->
         <main class="cards-grid">
             <div class="card">
                 <h3>💎 Sunucu Marketi</h3>
-                <p>VIP Paketleri, Edit Eşyalar ve Özel Üyelikler.</p>
+                <p>VIP Paketleri ve Özel Üyelikler.</p>
                 <a href="market.html" class="action-btn">Markete Git</a>
             </div>
 
             <div class="card">
                 <h3>🛠️ Destek Sistemi</h3>
-                <p>Sorun bildir, şikayette bulun veya talep aç.</p>
+                <p>Sorun bildir veya talep aç.</p>
                 <a href="destek.html" class="action-btn blue">Destek Talebi Aç</a>
             </div>
 
@@ -409,9 +404,9 @@ footer {
             </div>
 
             <div class="card">
-                <h3>⚔️ Oyun Modları</h3>
-                <p>SMP • Survival • Etkinlikler • BoxPvP</p>
-                <button class="action-btn" style="background: #374151; cursor: not-allowed;" disabled>Yakında</button>
+                <h3>🤖 Asistan Başvurusu</h3>
+                <p>Site asistanı ekibimize katıl!</p>
+                <a href="asistan.html" class="action-btn" style="background:#ec4899;">Asistan Başvurusu</a>
             </div>
         </main>
     </div>
@@ -455,13 +450,11 @@ footer {
 
 <!-- Yönetici Paneli Modalı -->
 <div id="adminPanelModal" class="modal-overlay">
-    <div class="modal-box" style="max-width: 650px;">
+    <div class="modal-box" style="max-width: 700px;">
         <span class="close-btn" onclick="closeModal('adminPanelModal')">&times;</span>
         <h2 style="color: #fbbf24; margin-bottom: 15px;"><i class="fa-solid fa-user-shield"></i> Monarch Network - Kurucu Paneli</h2>
-        <p style="font-size: 13px; color: #9ca3af; margin-bottom: 15px;">Oyuncuların gönderdiği tüm destek talepleri ve yetkili başvuruları:</p>
-        <div id="adminAllSubmissions">
-            <!-- JavaScript ile doldurulacak -->
-        </div>
+        <p style="font-size: 13px; color: #9ca3af; margin-bottom: 15px;">Oyuncuların gönderdiği tüm destek talepleri ve başvurular:</p>
+        <div id="adminAllSubmissions"></div>
     </div>
 </div>
 
@@ -476,10 +469,7 @@ function showNotification(message, isSuccess = false) {
     alertBox.style.borderLeftColor = isSuccess ? "#10b981" : "#ef4444";
     alertBox.className = isSuccess ? "success" : "";
     alertBox.style.display = "block";
-    
-    setTimeout(() => {
-        alertBox.style.display = "none";
-    }, 3000);
+    setTimeout(() => { alertBox.style.display = "none"; }, 3000);
 }
 
 function copyIP() {
@@ -490,20 +480,12 @@ function copyIP() {
 function openModal(id) { document.getElementById(id).classList.add("active"); }
 function closeModal(id) { document.getElementById(id).classList.remove("active"); }
 
-function switchToRegister() {
-    closeModal('loginModal');
-    openModal('registerModal');
-}
-
-function switchToLogin() {
-    closeModal('registerModal');
-    openModal('loginModal');
-}
+function switchToRegister() { closeModal('loginModal'); openModal('registerModal'); }
+function switchToLogin() { closeModal('registerModal'); openModal('loginModal'); }
 
 function checkLogin() {
     const loggedUser = localStorage.getItem("loggedInUser");
     const navAuth = document.getElementById("navAuth");
-
     let authHTML = `<button class="btn-nav admin-nav-btn" onclick="openModal('adminPassModal')"><i class="fa-solid fa-shield-halved"></i> Kurucu Paneli</button>`;
 
     if (loggedUser) {
@@ -529,14 +511,9 @@ function logout() {
 function loginProcess() {
     const user = document.getElementById("loginUser").value.trim();
     const pass = document.getElementById("loginPass").value;
-
-    if (!user || !pass) {
-        showNotification("Lütfen tüm alanları doldurun!");
-        return;
-    }
+    if (!user || !pass) { showNotification("Lütfen tüm alanları doldurun!"); return; }
 
     const savedPass = localStorage.getItem("user_" + user);
-
     if (savedPass && savedPass === pass) {
         localStorage.setItem("loggedInUser", user);
         closeModal('loginModal');
@@ -553,16 +530,9 @@ function registerProcess() {
     const user = document.getElementById("regUser").value.trim();
     const email = document.getElementById("regEmail").value.trim();
     const pass = document.getElementById("regPass").value;
+    if (!user || !email || !pass) { showNotification("Lütfen tüm alanları doldurun!"); return; }
 
-    if (!user || !email || !pass) {
-        showNotification("Lütfen tüm alanları doldurun!");
-        return;
-    }
-
-    if (localStorage.getItem("user_" + user)) {
-        showNotification("Bu kullanıcı adı zaten alınmış!");
-        return;
-    }
+    if (localStorage.getItem("user_" + user)) { showNotification("Bu kullanıcı adı zaten alınmış!"); return; }
 
     localStorage.setItem("user_" + user, pass);
     localStorage.setItem("loggedInUser", user);
@@ -574,7 +544,6 @@ function registerProcess() {
     showNotification("Kayıt başarılı ve otomatik giriş yapıldı!", true);
 }
 
-// Şifre Kontrolü
 function verifyAdminPassword() {
     const pass = document.getElementById("adminPasswordInput").value;
     if (pass === "PARSA.112") {
@@ -587,7 +556,6 @@ function verifyAdminPassword() {
     }
 }
 
-// Tüm Başvuru ve Destekleri Göster & Cevapla
 function loadAdminSubmissions() {
     const container = document.getElementById("adminAllSubmissions");
     const submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
@@ -608,23 +576,19 @@ function loadAdminSubmissions() {
             
             <div style="background:#161b22; padding:8px; border-radius:6px;">
                 <input type="text" id="adminReply_${index}" placeholder="Oyuncuya yanıt yaz..." value="${item.reply || ''}" style="width:100%; padding:6px; margin-bottom:6px; background:#0d1117; border:1px solid rgba(255,255,255,0.1); border-radius:4px; color:white; font-size:12px; outline:none;">
-                <button class="action-btn green" style="padding:6px; font-size:12px;" onclick="saveAdminReply(${index}, '${item.type}')">Yanıtı Kaydet & Durumu Güncelle</button>
+                <button class="action-btn green" style="padding:6px; font-size:12px;" onclick="saveAdminReply(${index})">Yanıtı Kaydet & Güncelle</button>
             </div>
         </div>
     `).join('');
 }
 
-function saveAdminReply(index, type) {
+function saveAdminReply(index) {
     let submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
     const replyText = document.getElementById(`adminReply_${index}`).value.trim();
-
-    if (!replyText) {
-        showNotification("Lütfen bir yanıt yaz!");
-        return;
-    }
+    if (!replyText) { showNotification("Lütfen bir yanıt yaz!"); return; }
 
     submissions[index].reply = replyText;
-    submissions[index].status = type === "Başvuru" ? "KABUL EDİLDİ" : "CEVAPLANDI";
+    submissions[index].status = submissions[index].type === "Başvuru" ? "KABUL EDİLDİ" : "CEVAPLANDI";
 
     localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
     showNotification("Yanıt başarıyla oyuncuya iletildi!", true);
