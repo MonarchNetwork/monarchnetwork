@@ -82,40 +82,17 @@ h1 {
     width: 100%; padding: 12px; margin: 15px 0;
     background: #0d1117; border: 1px solid rgba(255,255,255,0.1);
     border-radius: 8px; color: white; text-align: center; font-size: 16px;
-    outline: none;
-}
-
-/* Özel Site İçi Uyarı Kutusu (Alert Yerine) */
-#customAlert {
-    position: fixed;
-    top: 30px; right: 30px;
-    background: #1f2937;
-    border-left: 4px solid #ef4444;
-    color: white;
-    padding: 15px 25px;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    z-index: 9999;
-    display: none;
-    font-weight: 600;
-    font-size: 14px;
-}
-#customAlert.success {
-    border-left-color: #10b981;
 }
 </style>
 </head>
 <body>
-
-<!-- Özel Site İçi Uyarı Kutusu -->
-<div id="customAlert"></div>
 
 <!-- Şifre İsteme Ekranı -->
 <div id="passwordScreen">
     <div class="pass-box">
         <h2 style="color: #fbbf24; margin-bottom: 10px;"><i class="fa-solid fa-lock"></i> Kurucu Şifresi</h2>
         <p style="font-size: 13px; color: #9ca3af;">Devam etmek için şifreyi gir:</p>
-        <input type="password" id="passInput" placeholder="Şifre">
+        <input type="password" id="passInput" placeholder="Şifre (PARSA.112)">
         <button class="action-btn" style="width: 100%; padding: 12px;" onclick="checkPassword()">Giriş Yap</button>
     </div>
 </div>
@@ -132,19 +109,6 @@ h1 {
 </div>
 
 <script>
-// Tarayıcı alerti yerine şık site içi uyarı fonksiyonu
-function showNotification(message, isSuccess = false) {
-    const alertBox = document.getElementById("customAlert");
-    alertBox.textContent = message;
-    alertBox.style.borderLeftColor = isSuccess ? "#10b981" : "#ef4444";
-    alertBox.className = isSuccess ? "success" : "";
-    alertBox.style.display = "block";
-    
-    setTimeout(() => {
-        alertBox.style.display = "none";
-    }, 3000);
-}
-
 function checkPassword() {
     const val = document.getElementById("passInput").value;
     if (val === "PARSA.112") {
@@ -152,7 +116,7 @@ function checkPassword() {
         document.getElementById("panelContent").style.display = "block";
         loadSubmissions();
     } else {
-        showNotification("Yanlış şifre! Erişim reddedildi.");
+        alert("Hatalı şifre kral!");
     }
 }
 
@@ -175,7 +139,7 @@ function loadSubmissions() {
             <p style="color:#9ca3af; margin-bottom:12px;"><strong>İçerik:</strong> ${item.content || item.message}</p>
             
             <div style="background:#161b22; padding:10px; border-radius:6px;">
-                <input type="text" id="reply_${index}" placeholder="Oyuncuya yanıt yaz..." value="${item.reply || ''}" style="width:100%; padding:8px; margin-bottom:8px; background:#0d1117; border:1px solid rgba(255,255,255,0.1); border-radius:4px; color:white; font-size:13px; outline:none;">
+                <input type="text" id="reply_${index}" placeholder="Oyuncuya yanıt yaz..." value="${item.reply || ''}" style="width:100%; padding:8px; margin-bottom:8px; background:#0d1117; border:1px solid rgba(255,255,255,0.1); border-radius:4px; color:white; font-size:13px;">
                 <button class="action-btn" onclick="saveReply(${index}, '${item.type}')">Yanıtı Gönder & Güncelle</button>
             </div>
         </div>
@@ -187,7 +151,7 @@ function saveReply(index, type) {
     const replyText = document.getElementById(`reply_${index}`).value.trim();
 
     if (!replyText) {
-        showNotification("Lütfen bir yanıt yaz!");
+        alert("Lütfen bir yanıt yaz!");
         return;
     }
 
@@ -195,7 +159,7 @@ function saveReply(index, type) {
     submissions[index].status = type === "Başvuru" ? "KABUL EDİLDİ" : "CEVAPLANDI";
 
     localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
-    showNotification("Yanıt başarıyla oyuncuya iletildi!", true);
+    alert("Yanıt oyuncuya iletildi!");
     loadSubmissions();
 }
 </script>
