@@ -278,7 +278,7 @@ nav {
 .status-online { background: rgba(16, 185, 129, 0.2); color: #10b981; }
 .status-offline { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
 
-/* Admin Modal Styling */
+/* Modals & Popups */
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -315,6 +315,26 @@ nav {
     text-align: left;
 }
 
+/* Site İçi Şık Bildirim Kutusu (Tarayıcı uyarısı yerine) */
+#customAlert {
+    position: fixed;
+    top: 30px; right: 30px;
+    background: #1f2937;
+    border-left: 4px solid #ef4444;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    z-index: 9999;
+    display: none;
+    font-weight: 600;
+    font-size: 14px;
+    animation: fadeInOut 3s ease;
+}
+#customAlert.success {
+    border-left-color: #10b981;
+}
+
 footer {
     text-align: center; padding: 25px;
     background: #161b22; margin-top: 50px;
@@ -326,10 +346,13 @@ footer {
 
 <body>
 
+<!-- Özel Site İçi Uyarı Kutusu -->
+<div id="customAlert"></div>
+
 <nav>
     <div class="logo">👑 Monarch Network</div>
     <div class="nav-user" id="navAuth">
-        <!-- Dinamik Giriş/Çıkış ve Kurucu Paneli Butonu Buraya Gelecek -->
+        <!-- Dinamik Butonlar -->
     </div>
 </nav>
 
@@ -390,21 +413,21 @@ footer {
     </div>
 </div>
 
-<!-- Kurucu Şifre / Giriş Modalı -->
+<!-- Kurucu Şifre Modalı -->
 <div id="adminPassModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 380px; text-align: center;">
-        <span class="close-btn" onclick="closeAdminModal()">&times;</span>
+        <span class="close-btn" onclick="closeModal('adminPassModal')">&times;</span>
         <h2 style="color: #fbbf24; margin-bottom: 15px;"><i class="fa-solid fa-lock"></i> Kurucu Girişi</h2>
         <p style="font-size: 13px; color: #9ca3af; margin-bottom: 15px;">Yönetici Paneline erişmek için şifreyi gir:</p>
-        <input type="password" id="adminPasswordInput" placeholder="Şifre (PARSA.112)" style="width:100%; padding:10px; margin-bottom:15px; background:#0d1117; border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:white; text-align:center;">
+        <input type="password" id="adminPasswordInput" placeholder="Şifre" style="width:100%; padding:10px; margin-bottom:15px; background:#0d1117; border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:white; text-align:center; outline:none;">
         <button class="action-btn green" onclick="verifyAdminPassword()">Giriş Yap</button>
     </div>
 </div>
 
-<!-- Yönetici Paneli Modalı (Gelen Başvurular ve Destekler) -->
+<!-- Yönetici Paneli Modalı -->
 <div id="adminPanelModal" class="modal-overlay">
     <div class="modal-box">
-        <span class="close-btn" onclick="closeAdminPanel()">&times;</span>
+        <span class="close-btn" onclick="closeModal('adminPanelModal')">&times;</span>
         <h2 style="color: #fbbf24; margin-bottom: 15px;"><i class="fa-solid fa-user-shield"></i> Monarch Network - Kurucu Paneli</h2>
         <p style="font-size: 13px; color: #9ca3af; margin-bottom: 15px;">Oyuncuların gönderdiği tüm destek talepleri ve yetkili başvuruları:</p>
         <div id="adminAllSubmissions">
@@ -418,16 +441,31 @@ footer {
 </footer>
 
 <script>
+function showNotification(message, isSuccess = false) {
+    const alertBox = document.getElementById("customAlert");
+    alertBox.textContent = message;
+    alertBox.style.borderLeftColor = isSuccess ? "#10b981" : "#ef4444";
+    alertBox.className = isSuccess ? "success" : "";
+    alertBox.style.display = "block";
+    
+    setTimeout(() => {
+        alertBox.style.display = "none";
+    }, 3000);
+}
+
 function copyIP() {
     navigator.clipboard.writeText("MonarchNetwork.aternos.me");
-    alert("Sunucu IP Adresi Kopyalandı!");
+    showNotification("Sunucu IP Adresi Kopyalandı!", true);
 }
+
+function openModal(id) { document.getElementById(id).classList.add("active"); }
+function closeModal(id) { document.getElementById(id).classList.remove("active"); }
 
 function checkLogin() {
     const loggedUser = localStorage.getItem("loggedInUser");
     const navAuth = document.getElementById("navAuth");
 
-    let authHTML = `<button class="btn-nav admin-nav-btn" onclick="openAdminPassModal()"><i class="fa-solid fa-shield-halved"></i> Kurucu Paneli</button>`;
+    let authHTML = `<button class="btn-nav admin-nav-btn" onclick="openModal('adminPassModal')"><i class="fa-solid fa-shield-halved"></i> Kurucu Paneli</button>`;
 
     if (loggedUser) {
         authHTML += `
@@ -446,41 +484,25 @@ function checkLogin() {
 function logout() {
     localStorage.removeItem("loggedInUser");
     checkLogin();
+    showNotification("Başarıyla çıkış yapıldı.", true);
 }
 
-// Kurucu Şifre Kontrolü
-function openAdminPassModal() {
-    document.getElementById("adminPasswordInput").value = "";
-    document.getElementById("adminPassModal").classList.add("active");
-}
-
-function closeAdminModal() {
-    document.getElementById("adminPassModal").classList.remove("active");
-}
-
+// Şifre Kontrolü
 function verifyAdminPassword() {
     const pass = document.getElementById("adminPasswordInput").value;
     if (pass === "PARSA.112") {
-        closeAdminModal();
-        openAdminPanel();
+        closeModal('adminPassModal');
+        document.getElementById("adminPasswordInput").value = "";
+        openModal('adminPanelModal');
+        loadAdminSubmissions();
     } else {
-        alert("Hatalı şifre kral! Erişim reddedildi.");
+        showNotification("Yanlış şifre! Erişim reddedildi.");
     }
-}
-
-function openAdminPanel() {
-    document.getElementById("adminPanelModal").classList.add("active");
-    loadAdminSubmissions();
-}
-
-function closeAdminPanel() {
-    document.getElementById("adminPanelModal").classList.remove("active");
 }
 
 // Tüm Başvuru ve Destekleri Göster & Cevapla
 function loadAdminSubmissions() {
     const container = document.getElementById("adminAllSubmissions");
-    // Genel ortak depolama (destek.html ve yetkilibasvuru.html buraya kaydediyor)
     const submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
 
     if (submissions.length === 0) {
@@ -498,7 +520,7 @@ function loadAdminSubmissions() {
             <p style="color:#9ca3af; margin-bottom:10px;"><strong>İçerik:</strong> ${item.content || item.message}</p>
             
             <div style="background:#161b22; padding:8px; border-radius:6px;">
-                <input type="text" id="adminReply_${index}" placeholder="Oyuncuya yanıt yaz..." value="${item.reply || ''}" style="width:100%; padding:6px; margin-bottom:6px; background:#0d1117; border:1px solid rgba(255,255,255,0.1); border-radius:4px; color:white; font-size:12px;">
+                <input type="text" id="adminReply_${index}" placeholder="Oyuncuya yanıt yaz..." value="${item.reply || ''}" style="width:100%; padding:6px; margin-bottom:6px; background:#0d1117; border:1px solid rgba(255,255,255,0.1); border-radius:4px; color:white; font-size:12px; outline:none;">
                 <button class="action-btn green" style="padding:6px; font-size:12px;" onclick="saveAdminReply(${index}, '${item.type}')">Yanıtı Kaydet & Durumu Güncelle</button>
             </div>
         </div>
@@ -510,7 +532,7 @@ function saveAdminReply(index, type) {
     const replyText = document.getElementById(`adminReply_${index}`).value.trim();
 
     if (!replyText) {
-        alert("Lütfen bir yanıt yaz!");
+        showNotification("Lütfen bir yanıt yaz!");
         return;
     }
 
@@ -518,7 +540,7 @@ function saveAdminReply(index, type) {
     submissions[index].status = type === "Başvuru" ? "KABUL EDİLDİ" : "CEVAPLANDI";
 
     localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
-    alert("Yanıt oyuncuya başarıyla iletildi!");
+    showNotification("Yanıt başarıyla oyuncuya iletildi!", true);
     loadAdminSubmissions();
 }
 
