@@ -111,7 +111,7 @@ nav {
     background: #d97706;
 }
 
-/* Bildirim Zili */
+/* Bildirim Zili (Her Zaman Aktif) */
 .noti-bell {
     position: relative;
     cursor: pointer;
@@ -378,7 +378,7 @@ footer {
 <nav>
     <div class="logo">👑 Monarch Network</div>
     <div class="nav-user" id="navAuth">
-        <!-- Dinamik Butonlar -->
+        <!-- Dinamik Butonlar ve Zil -->
     </div>
 </nav>
 
@@ -518,16 +518,22 @@ function checkLogin() {
     const navAuth = document.getElementById("navAuth");
     let authHTML = `<button class="btn-nav admin-nav-btn" onclick="openModal('adminPassModal')"><i class="fa-solid fa-shield-halved"></i> Kurucu Paneli</button>`;
 
+    // Zil Her Zaman Görünür
+    let count = 0;
     if (loggedUser) {
         const submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
-        const userSubmissions = submissions.filter(s => s.user === loggedUser && s.reply);
-        const count = userSubmissions.length;
+        count = submissions.filter(s => s.user === loggedUser && s.reply).length;
+    }
 
+    authHTML += `
+        <div class="noti-bell" onclick="openUserNotis()">
+            <i class="fa-solid fa-bell"></i>
+            ${count > 0 ? `<span class="noti-badge">${count}</span>` : ''}
+        </div>
+    `;
+
+    if (loggedUser) {
         authHTML += `
-            <div class="noti-bell" onclick="openUserNotis()">
-                <i class="fa-solid fa-bell"></i>
-                ${count > 0 ? `<span class="noti-badge">${count}</span>` : ''}
-            </div>
             <span class="welcome-txt">👋 ${loggedUser}</span>
             <button class="btn-nav logout-btn" onclick="logout()">Çıkış</button>
         `;
@@ -542,6 +548,12 @@ function checkLogin() {
 
 function openUserNotis() {
     const loggedUser = localStorage.getItem("loggedInUser");
+    if (!loggedUser) {
+        showNotification("Bildirimleri görebilmek için önce giriş yapmalısın!");
+        openModal('loginModal');
+        return;
+    }
+
     const list = document.getElementById("userNotiList");
     const submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]").filter(s => s.user === loggedUser);
 
@@ -604,7 +616,16 @@ function registerProcess() {
     showNotification("Kayıt başarılı ve otomatik giriş yapıldı!", true);
 }
 
+// Hesap Olmadan Kurucu Paneline Girilemez Güvenlik Kontrolü
 function verifyAdminPassword() {
+    const loggedUser = localStorage.getItem("loggedInUser");
+    if (!loggedUser) {
+        closeModal('adminPassModal');
+        showNotification("Kurucu paneline girebilmek için önce bir hesapla giriş yapmalısın!");
+        openModal('loginModal');
+        return;
+    }
+
     const pass = document.getElementById("adminPasswordInput").value;
     if (pass === "PARSA.112") {
         closeModal('adminPassModal');
@@ -650,7 +671,6 @@ function saveAdminReply(index) {
     const lower = replyText.toLowerCase();
     submissions[index].reply = replyText;
 
-    // Otomatik Kabul / Ret Durum Belirleme
     if (lower.includes("red") || lower.includes("olumsuz") || lower.includes("uygun değil")) {
         submissions[index].status = "REDDEDİLDİ";
     } else {
