@@ -111,7 +111,7 @@ nav {
     background: #d97706;
 }
 
-/* Bildirim Zili (Her Zaman Aktif) */
+/* Bildirim Zili */
 .noti-bell {
     position: relative;
     cursor: pointer;
@@ -131,6 +131,24 @@ nav {
     font-weight: bold;
     padding: 2px 6px;
     border-radius: 10px;
+}
+
+/* Yeni Etiketi */
+.new-tag {
+    background: #ef4444;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 6px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
 }
 
 /* Hero Section */
@@ -291,6 +309,8 @@ nav {
 .action-btn.green:hover { background: #059669; }
 .action-btn.blue { background: #3b82f6; }
 .action-btn.blue:hover { background: #2563eb; }
+.action-btn.red { background: #ef4444; }
+.action-btn.red:hover { background: #dc2626; }
 
 /* Status Badges */
 .status-badge {
@@ -458,11 +478,14 @@ footer {
     </div>
 </div>
 
-<!-- Oyuncu Bildirim Modalı -->
+<!-- Oyuncu Bildirim Modalı (Okundu Yap Butonlu) -->
 <div id="notiModal" class="modal-overlay">
     <div class="modal-box">
         <span class="close-btn" onclick="closeModal('notiModal')">&times;</span>
-        <h2 style="color: #fbbf24; margin-bottom: 15px;"><i class="fa-solid fa-bell"></i> Bildirimlerin</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h2 style="color: #fbbf24;"><i class="fa-solid fa-bell"></i> Bildirimlerin</h2>
+            <button class="action-btn green" style="padding: 6px 12px; font-size: 12px; width: auto;" onclick="markAllAsRead()">✅ Okundu Yap & Temizle</button>
+        </div>
         <div id="userNotiList"></div>
     </div>
 </div>
@@ -478,11 +501,14 @@ footer {
     </div>
 </div>
 
-<!-- Yönetici Paneli Modalı -->
+<!-- Yönetici Paneli Modalı (YENİ Etiketli ve Tümünü Sil Tuşlu) -->
 <div id="adminPanelModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 700px;">
         <span class="close-btn" onclick="closeModal('adminPanelModal')">&times;</span>
-        <h2 style="color: #fbbf24; margin-bottom: 15px;"><i class="fa-solid fa-user-shield"></i> Monarch Network - Kurucu Paneli</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h2 style="color: #fbbf24;"><i class="fa-solid fa-user-shield"></i> Monarch Network - Kurucu Paneli</h2>
+            <button class="action-btn red" style="padding: 6px 12px; font-size: 12px; width: auto;" onclick="clearAllSubmissions()">🗑️ Tüm Talepleri Sil</button>
+        </div>
         <p style="font-size: 13px; color: #9ca3af; margin-bottom: 15px;">Oyuncuların gönderdiği tüm destek talepleri ve başvurular:</p>
         <div id="adminAllSubmissions"></div>
     </div>
@@ -518,11 +544,10 @@ function checkLogin() {
     const navAuth = document.getElementById("navAuth");
     let authHTML = `<button class="btn-nav admin-nav-btn" onclick="openModal('adminPassModal')"><i class="fa-solid fa-shield-halved"></i> Kurucu Paneli</button>`;
 
-    // Zil Her Zaman Görünür
     let count = 0;
     if (loggedUser) {
         const submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
-        count = submissions.filter(s => s.user === loggedUser && s.reply).length;
+        count = submissions.filter(s => s.user === loggedUser && s.reply && !s.read).length;
     }
 
     authHTML += `
@@ -574,6 +599,20 @@ function openUserNotis() {
     openModal('notiModal');
 }
 
+// Tüm Bildirimleri Okundu Yapıp Reddedilenleri Temizleme
+function markAllAsRead() {
+    const loggedUser = localStorage.getItem("loggedInUser");
+    let submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
+
+    // Kullanıcının yanıtlanmış veya reddedilmiş taleplerini okundu işaretle veya listeden düşür
+    submissions = submissions.filter(s => !(s.user === loggedUser && (s.status === 'REDDEDİLDİ' || s.reply)));
+
+    localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
+    closeModal('notiModal');
+    checkLogin();
+    showNotification("Bildirimler temizlendi ve okundu işaretlendi!", true);
+}
+
 function logout() {
     localStorage.removeItem("loggedInUser");
     checkLogin();
@@ -616,7 +655,6 @@ function registerProcess() {
     showNotification("Kayıt başarılı ve otomatik giriş yapıldı!", true);
 }
 
-// Hesap Olmadan Kurucu Paneline Girilemez Güvenlik Kontrolü
 function verifyAdminPassword() {
     const loggedUser = localStorage.getItem("loggedInUser");
     if (!loggedUser) {
@@ -649,14 +687,17 @@ function loadAdminSubmissions() {
     container.innerHTML = submissions.map((item, index) => `
         <div class="admin-item">
             <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                <strong style="color:#fbbf24;">[${item.type}] ${item.title || 'Talep'}</strong>
+                <div>
+                    ${!item.reply ? `<span class="new-tag">YENİ</span>` : ''}
+                    <strong style="color:#fbbf24;">[${item.type}] ${item.title || 'Talep'}</strong>
+                </div>
                 <span style="color:${item.status === 'REDDEDİLDİ' ? '#ef4444' : item.status === 'KABUL EDİLDİ' ? '#10b981' : '#f59e0b'}; font-weight:bold;">${item.status || 'BEKLEMEDE'}</span>
             </div>
             <p style="color:#e6edf3; margin-bottom:5px;"><strong>Gönderen:</strong> ${item.user || 'Bilinmiyor'}</p>
             <p style="color:#9ca3af; margin-bottom:10px;"><strong>İçerik:</strong> ${item.content || item.message}</p>
             
             <div style="background:#161b22; padding:8px; border-radius:6px;">
-                <input type="text" id="adminReply_${index}" placeholder="Yanıt yaz (Örn: Kabul edildi / Reddedildi nedenini yaz...)" value="${item.reply || ''}" style="width:100%; padding:6px; margin-bottom:6px; background:#0d1117; border:1px solid rgba(255,255,255,0.1); border-radius:4px; color:white; font-size:12px; outline:none;">
+                <input type="text" id="adminReply_${index}" placeholder="Yanıt yaz (Örn: Kabul edildi / Reddedildi)..." value="${item.reply || ''}" style="width:100%; padding:6px; margin-bottom:6px; background:#0d1117; border:1px solid rgba(255,255,255,0.1); border-radius:4px; color:white; font-size:12px; outline:none;">
                 <button class="action-btn green" style="padding:6px; font-size:12px;" onclick="saveAdminReply(${index})">Yanıtı Kaydet & Güncelle</button>
             </div>
         </div>
@@ -681,6 +722,15 @@ function saveAdminReply(index) {
     showNotification("Yanıt kaydedildi ve oyuncu bildirimine gönderildi!", true);
     loadAdminSubmissions();
     checkLogin();
+}
+
+function clearAllSubmissions() {
+    if (confirm("Tüm talep ve başvuruları silmek istediğine emin misin kral?")) {
+        localStorage.removeItem("monarch_submissions");
+        loadAdminSubmissions();
+        checkLogin();
+        showNotification("Tüm talepler temizlendi!", true);
+    }
 }
 
 async function checkServerStatus() {
