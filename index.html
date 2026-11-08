@@ -397,9 +397,7 @@ footer {
 
 <nav>
     <div class="logo">👑 Monarch Network</div>
-    <div class="nav-user" id="navAuth">
-        <!-- Dinamik Butonlar ve Zil -->
-    </div>
+    <div class="nav-user" id="navAuth"></div>
 </nav>
 
 <section class="hero">
@@ -412,14 +410,12 @@ footer {
 </section>
 
 <div class="container">
-
     <div class="banner-box">
         <span>🔥 Sezon 1 Başladı! Hemen sunucuya katıl ve yerini al.</span>
         <button class="copy-btn" style="background: white; color: #8b5cf6;" onclick="copyIP()">Katıl</button>
     </div>
 
     <div class="main-grid">
-        <!-- Sol Yan Bar -->
         <aside>
             <div class="side-card">
                 <h3><i class="fa-solid fa-server"></i> Sunucu Durumu</h3>
@@ -430,7 +426,6 @@ footer {
             </div>
         </aside>
 
-        <!-- Sağ Ana Modüller -->
         <main class="cards-grid">
             <div class="card">
                 <h3>💎 Sunucu Marketi</h3>
@@ -453,7 +448,7 @@ footer {
     </div>
 </div>
 
-<!-- Giriş Yap Modalı -->
+<!-- Modallar -->
 <div id="loginModal" class="modal-overlay">
     <div class="modal-box" style="text-align: center;">
         <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
@@ -465,7 +460,6 @@ footer {
     </div>
 </div>
 
-<!-- Kayıt Ol Modalı -->
 <div id="registerModal" class="modal-overlay">
     <div class="modal-box" style="text-align: center;">
         <span class="close-btn" onclick="closeModal('registerModal')">&times;</span>
@@ -478,7 +472,6 @@ footer {
     </div>
 </div>
 
-<!-- Oyuncu Bildirim Modalı (Okundu Yap Butonlu) -->
 <div id="notiModal" class="modal-overlay">
     <div class="modal-box">
         <span class="close-btn" onclick="closeModal('notiModal')">&times;</span>
@@ -490,7 +483,6 @@ footer {
     </div>
 </div>
 
-<!-- Kurucu Şifre Modalı -->
 <div id="adminPassModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 380px; text-align: center;">
         <span class="close-btn" onclick="closeModal('adminPassModal')">&times;</span>
@@ -501,13 +493,12 @@ footer {
     </div>
 </div>
 
-<!-- Yönetici Paneli Modalı (YENİ Etiketli ve Tümünü Sil Tuşlu) -->
 <div id="adminPanelModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 700px;">
         <span class="close-btn" onclick="closeModal('adminPanelModal')">&times;</span>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <h2 style="color: #fbbf24;"><i class="fa-solid fa-user-shield"></i> Monarch Network - Kurucu Paneli</h2>
-            <button class="action-btn red" style="padding: 6px 12px; font-size: 12px; width: auto;" onclick="clearAllSubmissions()">🗑️ Tüm Talepleri Sil</button>
+            <button class="action-btn red" style="padding: 6px 12px; font-size: 12px; width: auto;" onclick="clearAllSubmissions()">🗑️ Panel Taleplerini Temizle</button>
         </div>
         <p style="font-size: 13px; color: #9ca3af; margin-bottom: 15px;">Oyuncuların gönderdiği tüm destek talepleri ve başvurular:</p>
         <div id="adminAllSubmissions"></div>
@@ -546,8 +537,8 @@ function checkLogin() {
 
     let count = 0;
     if (loggedUser) {
-        const submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
-        count = submissions.filter(s => s.user === loggedUser && s.reply && !s.read).length;
+        const userNotis = JSON.parse(localStorage.getItem("user_notifications_" + loggedUser) || "[]");
+        count = userNotis.length;
     }
 
     authHTML += `
@@ -580,37 +571,34 @@ function openUserNotis() {
     }
 
     const list = document.getElementById("userNotiList");
-    const submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]").filter(s => s.user === loggedUser);
+    const userNotis = JSON.parse(localStorage.getItem("user_notifications_" + loggedUser) || "[]");
 
-    if (submissions.length === 0) {
-        list.innerHTML = `<p style="text-align:center; color:#6b7280; padding:20px;">Henüz aktif bir talebin veya yanıtın bulunmuyor.</p>`;
+    if (userNotis.length === 0) {
+        list.innerHTML = `<p style="text-align:center; color:#6b7280; padding:20px;">Henüz yeni bir bildirimin bulunmuyor.</p>`;
     } else {
-        list.innerHTML = submissions.map(s => `
+        list.innerHTML = userNotis.map(s => `
             <div class="admin-item" style="border-left: 4px solid ${s.status === 'REDDEDİLDİ' ? '#ef4444' : s.status === 'KABUL EDİLDİ' ? '#10b981' : '#3b82f6'};">
                 <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
                     <strong style="color:#fbbf24;">[${s.type}] ${s.title}</strong>
                     <span style="font-weight:bold; color:${s.status === 'REDDEDİLDİ' ? '#ef4444' : s.status === 'KABUL EDİLDİ' ? '#10b981' : '#f59e0b'};">${s.status}</span>
                 </div>
                 <p style="color:#9ca3af; margin-bottom:8px;"><strong>Detay:</strong> ${s.content}</p>
-                ${s.reply ? `<div style="background:#161b22; padding:8px; border-radius:6px; color:#10b981;"><strong>Kurucu Yanıtı:</strong> ${s.reply}</div>` : `<p style="font-size:11px; color:#6b7280;">Henüz yanıtlanmadı, beklemede...</p>`}
+                <div style="background:#161b22; padding:8px; border-radius:6px; color:#10b981;"><strong>Kurucu Yanıtı:</strong> ${s.reply}</div>
             </div>
         `).join('');
     }
     openModal('notiModal');
 }
 
-// Tüm Bildirimleri Okundu Yapıp Reddedilenleri Temizleme
+// Oyuncu Zildeki Kendi Bildirimlerini Temizler (Kurucu Panelini Etkilemez)
 function markAllAsRead() {
     const loggedUser = localStorage.getItem("loggedInUser");
-    let submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
+    if (!loggedUser) return;
 
-    // Kullanıcının yanıtlanmış veya reddedilmiş taleplerini okundu işaretle veya listeden düşür
-    submissions = submissions.filter(s => !(s.user === loggedUser && (s.status === 'REDDEDİLDİ' || s.reply)));
-
-    localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
+    localStorage.removeItem("user_notifications_" + loggedUser);
     closeModal('notiModal');
     checkLogin();
-    showNotification("Bildirimler temizlendi ve okundu işaretlendi!", true);
+    showNotification("Zildeki bildirimlerin temizlendi!", true);
 }
 
 function logout() {
@@ -710,13 +698,26 @@ function saveAdminReply(index) {
     if (!replyText) { showNotification("Lütfen bir yanıt yaz!"); return; }
 
     const lower = replyText.toLowerCase();
-    submissions[index].reply = replyText;
+    const item = submissions[index];
+    item.reply = replyText;
 
     if (lower.includes("red") || lower.includes("olumsuz") || lower.includes("uygun değil")) {
-        submissions[index].status = "REDDEDİLDİ";
+        item.status = "REDDEDİLDİ";
     } else {
-        submissions[index].status = submissions[index].type === "Başvuru" ? "KABUL EDİLDİ" : "CEVAPLANDI";
+        item.status = item.type === "Başvuru" ? "KABUL EDİLDİ" : "CEVAPLANDI";
     }
+
+    // Oyuncunun Kendi Özel Bildirim Kutuna Bağımsız Kaydetme (Zili Tetikler)
+    let userNotis = JSON.parse(localStorage.getItem("user_notifications_" + item.user) || "[]");
+    userNotis.push({
+        id: Date.now(),
+        type: item.type,
+        title: item.title,
+        content: item.content,
+        status: item.status,
+        reply: item.reply
+    });
+    localStorage.setItem("user_notifications_" + item.user, JSON.stringify(userNotis));
 
     localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
     showNotification("Yanıt kaydedildi ve oyuncu bildirimine gönderildi!", true);
@@ -724,12 +725,12 @@ function saveAdminReply(index) {
     checkLogin();
 }
 
+// Sadece Kurucu Panelindeki Listeyi Temizler (Oyuncunun Zilini Etkilemez)
 function clearAllSubmissions() {
-    if (confirm("Tüm talep ve başvuruları silmek istediğine emin misin kral?")) {
+    if (confirm("Kurucu panelindeki tüm talepleri silmek istediğine emin misin?")) {
         localStorage.removeItem("monarch_submissions");
         loadAdminSubmissions();
-        checkLogin();
-        showNotification("Tüm talepler temizlendi!", true);
+        showNotification("Kurucu paneli temizlendi!", true);
     }
 }
 
