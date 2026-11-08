@@ -37,9 +37,9 @@ body{
     padding: 30px; max-height: 600px; overflow-y: auto;
 }
 
-/* EKLEDİĞİMİZ KRİTİK MİNİK DİPNOT */
+/* YENİ ŞIK VE DÜZGÜN BİLGİ KUTUSU */
 .info-dipnot {
-    background: #7f1d1d; border: 1px solid #ef4444; color: #fca5a5;
+    background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #34d399;
     padding: 12px 15px; border-radius: 10px; font-size: 13px; font-weight: bold;
     margin-bottom: 20px; text-align: center; line-height: 1.4;
 }
@@ -79,16 +79,26 @@ body{
     cursor: pointer; transition: background 0.2s; margin-top: 10px;
 }
 .submit-btn:hover { background: #059669; }
+
+/* Site İçi Şık Bildirim Kutusu */
+#customAlert {
+    position: fixed; top: 30px; right: 30px; background: #1f2937;
+    border-left: 4px solid #10b981; color: white; padding: 15px 25px;
+    border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    z-index: 9999; display: none; font-weight: 600; font-size: 14px;
+}
 </style>
 </head>
 <body>
 
+<div id="customAlert"></div>
+
 <div class="container">
-    <a href="yetkilibasvuru.html" class="back-link">← Başvuru Listesine Dön</a>
+    <a href="index.html" class="back-link">← Ana Sayfaya Dön</a>
     
-    <!-- MİNİK DİPNOT UYARISI -->
+    <!-- DÜZELTİLEN ŞIK BİLGİ KUTUSU -->
     <div class="info-dipnot">
-        🔴 DİPNOT: Şu an bir altyapı bulunmuyor ve başvurular yetkililer tarafından görülemiyor. O yüzden henüz başvuru yapmayınız!
+        ✅ Monarch Asistan Sistemi Aktif: Gönderdiğin başvurular doğrudan Kurucu Paneline iletilmektedir.
     </div>
 
     <div class="chat-box">
@@ -99,7 +109,7 @@ body{
         
         <div class="chat-content">
             <div class="bot-welcome">
-                <b>Monarch Asistanı:</b> Selam kral! Rehberlik mülakat formuna hoş geldin. Aşağıdaki 15 soruyu sunucu kurallarına ve gereksinimlerine uygun şekilde eksiksiz doldurursan başvurunu anında Admin abilerime ileteceğim. Başarılar!
+                <b>Monarch Asistanı:</b> Selam kral! Rehberlik mülakat formuna hoş geldin. Aşağıdaki 15 soruyu sunucu kurallarına ve gereksinimlerine uygun şekilde eksiksiz doldurursan başvurunu anında kurucu paneline ileteceğim. Başarılar!
             </div>
 
             <div id="applicationForm">
@@ -189,11 +199,18 @@ body{
 </div>
 
 <script>
+function showNotification(message) {
+    const alertBox = document.getElementById("customAlert");
+    alertBox.textContent = message;
+    alertBox.style.display = "block";
+    setTimeout(() => { alertBox.style.display = "none"; }, 3000);
+}
+
 function finishForm() {
     const loggedInUser = localStorage.getItem("loggedInUser");
     if(!loggedInUser) {
-        alert("Kral, önce giriş yapmalısın!");
-        window.location.href = "index.html";
+        showNotification("Kral, önce giriş yapmalısın!");
+        setTimeout(() => { window.location.href = "index.html"; }, 1500);
         return;
     }
 
@@ -207,21 +224,26 @@ function finishForm() {
     });
 
     if(!allFilled) {
-        alert("Lütfen 15 sorunun hepsini doldur kral!");
+        showNotification("Lütfen 15 sorunun hepsini doldur kral!");
         return;
     }
 
-    let apps = JSON.parse(localStorage.getItem("site_apps")) || [];
-    apps.push({ 
-        user: loggedInUser, 
-        nameAge: "Rehber Adayı", 
-        role: "Asistan Rehber Formu", 
-        exp: answers.join(" | ") 
-    });
-    localStorage.setItem("site_apps", JSON.stringify(apps));
+    const submissions = JSON.parse(localStorage.getItem("monarch_submissions") || "[]");
+    const newApply = {
+        id: Date.now(),
+        type: "Başvuru",
+        user: loggedInUser,
+        title: "Asistan Rehber Formu",
+        content: answers.join(" | "),
+        status: "BEKLEMEDE",
+        reply: ""
+    };
 
-    alert("Başvuru kaydedildi kral!");
-    window.location.href = "index.html";
+    submissions.push(newApply);
+    localStorage.setItem("monarch_submissions", JSON.stringify(submissions));
+
+    showNotification("Başvuru başarıyla Kurucu Paneline iletildi!");
+    setTimeout(() => { window.location.href = "index.html"; }, 1500);
 }
 </script>
 </body>
